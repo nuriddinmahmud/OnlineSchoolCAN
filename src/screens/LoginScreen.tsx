@@ -8,6 +8,8 @@ import {
   Alert,
 } from "react-native";
 import { useAuth } from "../features/auth/service/useAuth";
+import Feather from "@expo/vector-icons/Feather";
+
 
 interface LoginScreenProps {
   navigation: any;
@@ -79,6 +81,12 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
           </Text>
         </TouchableOpacity>
       </View>
+      <View style={styles.mainTitleContainer}>
+    <Text style={styles.mainTitle}>
+      <Feather name="book" size={30} color="#2563eb" />
+      Can Education
+    </Text>
+  </View>
     </View>
   );
 };
@@ -116,6 +124,18 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+  },
+  mainTitleContainer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingVertical: 60,
+    alignItems: "center",
+  },
+  mainTitle: {
+    fontSize: 24,
+    fontWeight: "600",
   },
   input: {
     borderWidth: 1,
