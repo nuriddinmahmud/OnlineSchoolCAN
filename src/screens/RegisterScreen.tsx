@@ -8,6 +8,7 @@ import {
   Alert,
 } from "react-native";
 import { useAuth } from "../features/auth/service/useAuth";
+import Feather from "@expo/vector-icons/Feather";
 
 interface RegisterScreenProps {
   navigation: any;
@@ -94,6 +95,12 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
           </Text>
         </TouchableOpacity>
       </View>
+      <View style={styles.mainTitleContainer}>
+        <Text style={styles.mainTitle}>
+          <Feather name="book" size={30} color="#2563eb" />
+          Can Education
+        </Text>
+      </View>
     </View>
   );
 };
@@ -104,6 +111,21 @@ const styles = StyleSheet.create({
     backgroundColor: "#f5f5f5",
     justifyContent: "center",
     padding: 20,
+    display: "flex",
+    flexDirection: "column",
+  },
+  mainTitleContainer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingVertical: 60,
+    alignItems: "center",
+  },
+  mainTitle: {
+    fontSize: 24,
+    fontWeight: "600",
+    textAlign: "center",
   },
   title: {
     fontSize: 24,
@@ -118,7 +140,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    fontWeight: "400",
+    fontWeight: "500",
     color: "#020817",
     marginBottom: 5,
   },
