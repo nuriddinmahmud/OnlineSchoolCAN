@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Alert,
 } from "react-native";
-import { useDispatch } from "react-redux";
+import { useAuth } from "../features/auth/service/useAuth";
 
 interface LoginScreenProps {
   navigation: any;
@@ -16,12 +16,22 @@ interface LoginScreenProps {
 const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const dispatch = useDispatch();
+
+  const { login } = useAuth();
 
   const handleLogin = async () => {
     if (!email || !password) {
-      Alert.alert("Error", "Please fill in all fields");
+      Alert.alert("Ошибка", "Пожалуйста, заполните все поля");
       return;
+    }
+
+    try {
+      await login.mutateAsync({
+        email: email,
+        password: password,
+      });
+    } catch (error) {
+      Alert.alert("Ошибка входа", "Проверьте данные и попробуйте снова");
     }
   };
 
@@ -31,35 +41,41 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome Back</Text>
-      <Text style={styles.subtitle}>Sign in to continue learning</Text>
-
       <View style={styles.form}>
+        <Text style={styles.title}>Вход</Text>
+        <Text style={styles.subtitle}>
+          Войдите в аккаунт для доступа к курсам
+        </Text>
+
+        <Text style={styles.label}>Email</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter your Email"
+          placeholder="example@email.com"
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
           autoCapitalize="none"
         />
+
+        <Text style={styles.label}>Пароль</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter your Password"
+          placeholder="Введите пароль"
           value={password}
           onChangeText={setPassword}
           secureTextEntry
         />
 
-        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-          <Text style={styles.loginButtonText}>Sign In</Text>
+        <TouchableOpacity
+          style={styles.loginButtonMain}
+          onPress={handleLogin}>
+          <Text style={styles.loginButtonTextMain}>Войти</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.registerButton}
-          onPress={navigateToRegister}>
+        <TouchableOpacity style={styles.registerButton} onPress={navigateToRegister}>
           <Text style={styles.registerButtonText}>
-            Don't have an account? Sign Up
+            <Text style={styles.registerButtonTextTwo}>Нет аккаунта?</Text>{" "}
+            Зарегистрироваться
           </Text>
         </TouchableOpacity>
       </View>
@@ -75,17 +91,21 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 8,
-    color: "#333",
+    fontSize: 24,
+    fontWeight: "600",
+    marginBottom: 1,
   },
   subtitle: {
-    fontSize: 16,
-    textAlign: "center",
-    marginBottom: 40,
-    color: "#666",
+    fontSize: 14,
+    fontWeight: "400",
+    color: "#64748b",
+    marginBottom: 25,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: "500",
+    color: "#020817",
+    marginBottom: 5,
   },
   form: {
     backgroundColor: "#fff",
@@ -101,18 +121,18 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ddd",
     borderRadius: 8,
-    padding: 12,
+    padding: 10,
     marginBottom: 16,
     fontSize: 16,
   },
-  loginButton: {
-    backgroundColor: "#007AFF",
+  loginButtonMain: {
+    backgroundColor: "#000",
     borderRadius: 8,
-    padding: 16,
+    padding: 10,
     alignItems: "center",
     marginBottom: 16,
   },
-  loginButtonText: {
+  loginButtonTextMain: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "600",
@@ -122,6 +142,10 @@ const styles = StyleSheet.create({
   },
   registerButtonText: {
     color: "#007AFF",
+    fontSize: 16,
+  },
+  registerButtonTextTwo: {
+    color: "#020817",
     fontSize: 16,
   },
 });
