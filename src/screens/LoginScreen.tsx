@@ -8,6 +8,7 @@ import {
   Alert,
 } from "react-native";
 import { useAuth } from "../features/auth/service/useAuth";
+import Feather from "@expo/vector-icons/Feather";
 
 interface LoginScreenProps {
   navigation: any;
@@ -19,19 +20,26 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
 
   const { login } = useAuth();
 
-  const handleLogin = async () => {
+  const handleLogin = () => {
     if (!email || !password) {
       Alert.alert("Ошибка", "Пожалуйста, заполните все поля");
       return;
     }
 
     try {
-      await login.mutateAsync({
-        email: email,
-        password: password,
-      });
+      login.mutate(
+        { email, password },
+        {
+          onSuccess: () => {
+            Alert.alert("Вход успешен", "Вы можете продолжить обучение");
+          },
+          onError: () => {
+            Alert.alert("Ошибка входа", "Неверные учетные данные для входа");
+          },
+        }
+      );
     } catch (error) {
-      Alert.alert("Ошибка входа", "Проверьте данные и попробуйте снова");
+      Alert.alert("Ошибка входа", "Неверные учетные данные для входа");
     }
   };
 
@@ -42,9 +50,9 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.form}>
-        <Text style={styles.title}>Вход</Text>
+        <Text style={styles.title}>Вход в систему</Text>
         <Text style={styles.subtitle}>
-          Войдите в аккаунт для доступа к курсам
+          Войдите в свой аккаунт для продолжения обучения
         </Text>
 
         <Text style={styles.label}>Email</Text>
@@ -60,24 +68,35 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
         <Text style={styles.label}>Пароль</Text>
         <TextInput
           style={styles.input}
-          placeholder="Введите пароль"
+          placeholder="Ваш пароль"
           value={password}
           onChangeText={setPassword}
           secureTextEntry
         />
 
-        <TouchableOpacity
-          style={styles.loginButtonMain}
-          onPress={handleLogin}>
+        <TouchableOpacity style={styles.loginButtonMain} onPress={handleLogin}>
           <Text style={styles.loginButtonTextMain}>Войти</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.registerButton} onPress={navigateToRegister}>
+        <TouchableOpacity
+          style={styles.registerButton}
+          onPress={navigateToRegister}>
           <Text style={styles.registerButtonText}>
             <Text style={styles.registerButtonTextTwo}>Нет аккаунта?</Text>{" "}
-            Зарегистрироваться
+            <Text style={styles.registerButtonTextFour}>
+              Зарегистрироваться
+            </Text>
+          </Text>
+          <Text style={styles.registerButtonTextThree}>
+            После регистрации проверьте email для подтверждения аккаунта
           </Text>
         </TouchableOpacity>
+      </View>
+      <View style={styles.mainTitleContainer}>
+        <Text style={styles.mainTitle}>
+          <Feather name="book" size={30} color="#2563eb" />
+          Can Education
+        </Text>
       </View>
     </View>
   );
@@ -97,7 +116,6 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 14,
-    fontWeight: "400",
     color: "#64748b",
     marginBottom: 25,
   },
@@ -116,6 +134,18 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+  },
+  mainTitleContainer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingVertical: 60,
+    alignItems: "center",
+  },
+  mainTitle: {
+    fontSize: 24,
+    fontWeight: "600",
   },
   input: {
     borderWidth: 1,
@@ -145,8 +175,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   registerButtonTextTwo: {
-    color: "#020817",
-    fontSize: 16,
+    color: "#4b5563",
+    fontSize: 14,
+  },
+  registerButtonTextThree: {
+    fontSize: 12,
+    color: "#6b7280",
+    textAlign: "center",
+    marginTop: 10,
+  },
+  registerButtonTextFour: {
+    color: "#3b82f6",
+    fontWeight: "500",
   },
 });
 
