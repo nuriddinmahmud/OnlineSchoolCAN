@@ -8,6 +8,7 @@ import {
   Alert,
 } from "react-native";
 import { useAuth } from "../features/auth/service/useAuth";
+import Feather from "@expo/vector-icons/Feather";
 
 interface RegisterScreenProps {
   navigation: any;
@@ -18,27 +19,45 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [nameFocused, setNameFocused] = useState(false);
+  const [emailFocused, setEmailFocused] = useState(false);
+  const [passwordFocused, setPasswordFocused] = useState(false);
+
   const { register } = useAuth();
+  const { isPending, mutateAsync } = register;
 
   const handleRegister = async () => {
-    if (!email || !password) {
-      Alert.alert("Error", "Please fill in all fields");
+    if (!name || !email || !password) {
+      Alert.alert("Ошибка", "Пожалуйста, заполните все поля");
       return;
     }
 
     if (password.length < 6) {
-      Alert.alert("Error", "Password must be at least 6 characters");
+      Alert.alert("Ошибка", "Пароль должен быть не менее 6 символов");
       return;
     }
 
     try {
-      await register.mutateAsync({
-        email: email,
-        password: password,
-        name: name,
-      });
+      await mutateAsync(
+        {
+          email: email,
+          password: password,
+          name: name,
+        },
+        {
+          onSuccess: () => {
+            Alert.alert("Регистрация успешна", "Вы можете войти в систему");
+          },
+          onError: () => {
+            Alert.alert(
+              "Регистрация не удалась",
+              "Пожалуйста, попробуйте еще раз"
+            );
+          },
+        }
+      );
     } catch (error) {
-      Alert.alert("Registration Failed", "Please try again");
+      Alert.alert("Регистрация не удалась", "Пользователь уже зарегистрирован");
     }
   };
 
@@ -56,43 +75,59 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
 
         <Text style={styles.label}>Имя</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, nameFocused && styles.inputFocused]}
           placeholder="Ваше имя"
           value={name}
           onChangeText={setName}
+          autoCapitalize="none"
+          onFocus={() => setNameFocused(true)}
+          onBlur={() => setNameFocused(false)}
         />
 
         <Text style={styles.label}>Email</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, emailFocused && styles.inputFocused]}
           placeholder="example@email.com"
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
           autoCapitalize="none"
+          onFocus={() => setEmailFocused(true)}
+          onBlur={() => setEmailFocused(false)}
         />
 
         <Text style={styles.label}>Пароль</Text>
         <TextInput
-          style={styles.input}
+          style={[styles.input, passwordFocused && styles.inputFocused]}
           placeholder="Минимум 6 символов"
           value={password}
           onChangeText={setPassword}
           secureTextEntry
+          onFocus={() => setPasswordFocused(true)}
+          onBlur={() => setPasswordFocused(false)}
         />
 
         <TouchableOpacity
           style={styles.registerButton}
-          onPress={handleRegister}>
-          <Text style={styles.registerButtonText}>Зарегистрироваться</Text>
+          onPress={handleRegister}
+          disabled={isPending}>
+          <Text style={styles.registerButtonText}>
+            {isPending ? "Загрузка..." : "Зарегистрироваться"}
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.loginButton} onPress={navigateToLogin}>
-          <Text style={styles.loginButtonText}>
-            <Text style={styles.loginButtonTextTwo}>Уже есть аккаунт?</Text>{" "}
-            Войти
+          <Text style={styles.registerButtonMainText}>
+            <Text style={styles.registerButtonTextTwo}>Уже есть аккаунт?</Text>{" "}
+            <Text style={styles.registerButtonTextThree}>Войти</Text>
           </Text>
         </TouchableOpacity>
+      </View>
+      <View style={styles.mainTitleContainer}>
+        <Text style={styles.mainTitle}>
+          <Feather name="book" size={30} color="#2563eb" />
+          Can Education
+        </Text>
       </View>
     </View>
   );
@@ -104,6 +139,21 @@ const styles = StyleSheet.create({
     backgroundColor: "#f5f5f5",
     justifyContent: "center",
     padding: 20,
+    display: "flex",
+    flexDirection: "column",
+  },
+  mainTitleContainer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingVertical: 60,
+    alignItems: "center",
+  },
+  mainTitle: {
+    fontSize: 24,
+    fontWeight: "600",
+    textAlign: "center",
   },
   title: {
     fontSize: 24,
@@ -118,7 +168,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    fontWeight: "400",
+    fontWeight: "500",
     color: "#020817",
     marginBottom: 5,
   },
@@ -140,6 +190,10 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     fontSize: 16,
   },
+  inputFocused: {
+    borderColor: "#000",
+    borderWidth: 2,
+  },
   registerButton: {
     backgroundColor: "#000",
     borderRadius: 8,
@@ -152,16 +206,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
   },
+  registerButtonTextThree: {
+    fontWeight: "500",
+    color: "#3b82f6",
+  },
   loginButton: {
     alignItems: "center",
   },
-  loginButtonText: {
+  registerButtonMainText: {
     color: "#007AFF",
     fontSize: 16,
   },
-  loginButtonTextTwo: {
-    color: "#020817",
-    fontSize: 16,
+  registerButtonTextTwo: {
+    color: "#4b5563",
+    fontSize: 14,
   },
 });
 
