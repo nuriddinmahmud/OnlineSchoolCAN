@@ -45,10 +45,6 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
     }
   };
 
-  const navigateToRegister = () => {
-    navigation.navigate("Register");
-  };
-
   return (
     <View style={styles.container}>
       <View style={styles.form}>
@@ -87,7 +83,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
 
         <TouchableOpacity
           style={styles.registerButton}
-          onPress={navigateToRegister}>
+          onPress={() => navigation.navigate("Register")}>
           <Text style={styles.registerButtonText}>
             <Text style={styles.registerButtonTextTwo}>Нет аккаунта?</Text>{" "}
             <Text style={styles.registerButtonTextFour}>
