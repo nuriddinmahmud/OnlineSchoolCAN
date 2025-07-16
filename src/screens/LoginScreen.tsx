@@ -19,6 +19,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
   const [password, setPassword] = useState("");
 
   const { login } = useAuth();
+  const { isPending, mutateAsync } = login;
 
   const handleLogin = () => {
     if (!email || !password) {
@@ -27,11 +28,12 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
     }
 
     try {
-      login.mutate(
+      mutateAsync(
         { email, password },
         {
           onSuccess: () => {
             Alert.alert("Вход успешен", "Вы можете продолжить обучение");
+            navigation.navigate("HomeScreen");
           },
           onError: () => {
             Alert.alert("Ошибка входа", "Неверные учетные данные для входа");
@@ -74,8 +76,13 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
           secureTextEntry
         />
 
-        <TouchableOpacity style={styles.loginButtonMain} onPress={handleLogin}>
-          <Text style={styles.loginButtonTextMain}>Войти</Text>
+        <TouchableOpacity
+          style={styles.loginButtonMain}
+          onPress={handleLogin}
+          disabled={isPending}>
+          <Text style={styles.loginButtonTextMain}>
+            {isPending ? "Загрузка..." : "Войти"}
+          </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
