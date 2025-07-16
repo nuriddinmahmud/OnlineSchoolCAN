@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setToken } from "../features/auth/store/auth.slice";
 import AuthNavigator from "./AuthNavigator";
 import { AppDispatch, RootState } from "../app/store";
+import MainNavigator from "./MainNavigator";
 
 const AppNavigator = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -15,7 +16,7 @@ const AppNavigator = () => {
 
   return (
     <NavigationContainer>
-      <AuthNavigator />
+      <MainNavigator/>
     </NavigationContainer>
   );
 };

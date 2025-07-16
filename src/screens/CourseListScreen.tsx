@@ -6,40 +6,68 @@ import {
   TouchableOpacity,
   StyleSheet,
   Image,
+  FlatList,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import CourseCard from "../components/CourseCard";
 
 interface CourseListScreenProps {
   navigation: any;
 }
 
+const placeholderCourses = [
+  {
+    imageUrl: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
+    isFree: true,
+    title: "HTML",
+    level: "Начинающий",
+    description: "Этот курс по HTML предназначен для тех, кто хочет научиться создавать веб-страницы с...",
+    instructor: "Мурадов Азиз",
+    duration: "24 минут",
+    rating: 0,
+    studentsCount: 0,
+    category: "Программирование",
+  },
+  {
+    imageUrl: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
+    isFree: true,
+    title: "C++",
+    level: "Начинающий",
+    description: "Этот курс предназначен для начинающих и познакомит вас с основами языка...",
+    instructor: "Мурадов Азиз",
+    duration: "20 минут",
+    rating: 0,
+    studentsCount: 0,
+    category: "Программирование",
+  },
+  {
+    imageUrl: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
+    isFree: true,
+    title: "Python",
+    level: "Начинающий",
+    description: "Этот курс по Python предназначен для новичков и поможет вам освоить основы...",
+    instructor: "Мурадов Азиз",
+    duration: "25 минут",
+    rating: 0,
+    studentsCount: 0,
+    category: "Программирование",
+  },
+  {
+    imageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+    isFree: true,
+    title: "Сбор средств на постройку школы",
+    level: "Начинающий",
+    description: "Научить участников разрабатывать и проводить эффективные кампании по сбору...",
+    instructor: "Саид",
+    duration: "1 час",
+    rating: 0,
+    studentsCount: 0,
+    category: "Бизнес",
+  },
+];
+
 const CourseListScreen: React.FC<CourseListScreenProps> = ({ navigation }) => {
   const [showCategoryFilter, setShowCategoryFilter] = useState(false);
-
-  const renderCourseItem = ({ item }: { item: any }) => (
-    <TouchableOpacity style={styles.courseItem}>
-      <Image source={{ uri: item.imageUrl }} style={styles.courseImage} />
-      <View style={styles.courseInfo}>
-        <Text style={styles.courseTitle}>{item.title}</Text>
-        <Text style={styles.courseCategory}>{item.category}</Text>
-        <Text style={styles.courseDescription} numberOfLines={2}>
-          {item.description}
-        </Text>
-        <View style={styles.courseMetrics}>
-          <Text style={styles.courseMetric}>
-            <Ionicons name="time-outline" size={12} color="#666" />{" "}
-            {item.duration}
-          </Text>
-          <Text style={styles.courseMetric}>
-            <Ionicons name="book-outline" size={12} color="#666" />{" "}
-            {item.lessonsCount} lessons
-          </Text>
-          <Text style={styles.courseLevel}>{item.level}</Text>
-        </View>
-        {item.isEnrolled && <Text style={styles.enrolledBadge}>Enrolled</Text>}
-      </View>
-    </TouchableOpacity>
-  );
 
   return (
     <View style={styles.container}>
@@ -70,6 +98,27 @@ const CourseListScreen: React.FC<CourseListScreenProps> = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       )}
+
+      <FlatList
+        data={placeholderCourses}
+        keyExtractor={(item, idx) => item.title + idx}
+        renderItem={({ item }) => (
+          <CourseCard
+            imageUrl={item.imageUrl}
+            isFree={item.isFree}
+            title={item.title}
+            level={item.level}
+            description={item.description}
+            instructor={item.instructor}
+            duration={item.duration}
+            rating={item.rating}
+            studentsCount={item.studentsCount}
+            category={item.category}
+            onPress={() => {}}
+          />
+        )}
+        contentContainerStyle={{ padding: 16 }}
+      />
     </View>
   );
 };
