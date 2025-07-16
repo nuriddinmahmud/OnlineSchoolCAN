@@ -5,70 +5,21 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Image,
   FlatList,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CourseCard from "../components/CourseCard";
-import CourseDetailScreen from "./CourseDetailScreen";
+import { useCourses } from "../features/courses/service/useCourses";
 
 interface CourseListScreenProps {
   navigation: any;
 }
 
-const placeholderCourses = [
-  {
-    imageUrl: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
-    isFree: true,
-    title: "HTML",
-    level: "Начинающий",
-    description: "Этот курс по HTML предназначен для тех, кто хочет научиться создавать веб-страницы с...",
-    instructor: "Мурадов Азиз",
-    duration: "24 минут",
-    rating: 0,
-    studentsCount: 0,
-    category: "Программирование",
-  },
-  {
-    imageUrl: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
-    isFree: true,
-    title: "C++",
-    level: "Начинающий",
-    description: "Этот курс предназначен для начинающих и познакомит вас с основами языка...",
-    instructor: "Мурадов Азиз",
-    duration: "20 минут",
-    rating: 0,
-    studentsCount: 0,
-    category: "Программирование",
-  },
-  {
-    imageUrl: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
-    isFree: true,
-    title: "Python",
-    level: "Начинающий",
-    description: "Этот курс по Python предназначен для новичков и поможет вам освоить основы...",
-    instructor: "Мурадов Азиз",
-    duration: "25 минут",
-    rating: 0,
-    studentsCount: 0,
-    category: "Программирование",
-  },
-  {
-    imageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
-    isFree: true,
-    title: "Сбор средств на постройку школы",
-    level: "Начинающий",
-    description: "Научить участников разрабатывать и проводить эффективные кампании по сбору...",
-    instructor: "Саид",
-    duration: "1 час",
-    rating: 0,
-    studentsCount: 0,
-    category: "Бизнес",
-  },
-];
-
 const CourseListScreen: React.FC<CourseListScreenProps> = ({ navigation }) => {
   const [showCategoryFilter, setShowCategoryFilter] = useState(false);
+
+  const { getCourses } = useCourses();
+  const { data } = getCourses;
 
   return (
     <View style={styles.container}>
@@ -101,11 +52,11 @@ const CourseListScreen: React.FC<CourseListScreenProps> = ({ navigation }) => {
       )}
 
       <FlatList
-        data={placeholderCourses}
+        data={data?.courses}
         keyExtractor={(item, idx) => item.title + idx}
         renderItem={({ item }) => (
           <CourseCard
-            imageUrl={item.imageUrl}
+            imageUrl={item?.image_url}
             isFree={item.isFree}
             title={item.title}
             level={item.level}
@@ -189,70 +140,6 @@ const styles = StyleSheet.create({
   },
   courseList: {
     padding: 16,
-  },
-  courseItem: {
-    flexDirection: "row",
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  courseImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 8,
-    marginRight: 16,
-  },
-  courseInfo: {
-    flex: 1,
-  },
-  courseTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#333",
-    marginBottom: 4,
-  },
-  courseCategory: {
-    fontSize: 14,
-    color: "#007AFF",
-    marginBottom: 4,
-    textTransform: "capitalize",
-  },
-  courseDescription: {
-    fontSize: 14,
-    color: "#666",
-    marginBottom: 8,
-  },
-  courseMetrics: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  courseMetric: {
-    fontSize: 12,
-    color: "#666",
-    marginRight: 16,
-  },
-  courseLevel: {
-    fontSize: 12,
-    color: "#007AFF",
-    fontWeight: "600",
-    textTransform: "capitalize",
-  },
-  enrolledBadge: {
-    fontSize: 12,
-    color: "#28a745",
-    fontWeight: "600",
-    backgroundColor: "#e8f5e8",
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 4,
-    alignSelf: "flex-start",
   },
 });
 

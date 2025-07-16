@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 interface AuthState {
@@ -20,10 +21,12 @@ export const authSlice = createSlice({
 
     setToken: (state, action: PayloadAction<string>) => {
       state.token = action.payload;
+      AsyncStorage.setItem("token", JSON.stringify(action.payload));
     },
 
     logout: (state) => {
       state.token = null;
+      AsyncStorage.removeItem("token");
     },
   },
 });

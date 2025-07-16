@@ -10,71 +10,22 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import { useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "../navigation/types";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useCourses } from "../features/courses/service/useCourses";
 
-const courses = [
-  {
-    id: 1,
-    title: "HTML",
-    description:
-      "Этот курс по HTML предназначен для тех, кто хочет научиться создавать веб-страницы с...",
-    author: "Мурадов Азиз",
-    duration: "24 минут",
-    rating: 0,
-    students: 0,
-    level: "Начинающий",
-    category: "Программирование",
-    imageUrl:
-      "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=400",
-    isFree: true,
-  },
-  {
-    id: 2,
-    title: "C++",
-    description:
-      "Этот курс предназначен для начинающих и познакомит вас с основами языка...",
-    author: "Мурадов Азиз",
-    duration: "20 минут",
-    rating: 0,
-    students: 0,
-    level: "Начинающий",
-    category: "Программирование",
-    imageUrl:
-      "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=400",
-    isFree: true,
-  },
-  {
-    id: 3,
-    title: "Python",
-    description:
-      "Этот курс по Python предназначен для новичков и поможет вам освоить основы...",
-    author: "Мурадов Азиз",
-    duration: "25 минут",
-    rating: 0,
-    students: 0,
-    level: "Начинающий",
-    category: "Программирование",
-    imageUrl:
-      "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=400",
-    isFree: true,
-  },
-  {
-    id: 4,
-    title: "Сбор средств на постройку школы",
-    description:
-      "Научить участников разрабатывать и проводить эффективные кампании по...",
-    author: "Саид",
-    duration: "1 час",
-    rating: 0,
-    students: 0,
-    level: "Начинающий",
-    category: "Бизнес",
-    imageUrl:
-      "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=400",
-    isFree: true,
-  },
-];
+type HomeScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  "Home"
+>;
 
 const HomeScreen: React.FC = () => {
+  const navigation = useNavigation<HomeScreenNavigationProp>();
+
+  const { getCourses } = useCourses();
+  const { data } = getCourses;
+
   const stats = [
     {
       icon: (
@@ -111,47 +62,50 @@ const HomeScreen: React.FC = () => {
     },
   ];
 
-  const renderCourse = ({ item }: { item: (typeof courses)[0] }) => (
-    <View style={styles.card}>
-      <View style={styles.imageContainer}>
-        <Image source={{ uri: item.imageUrl }} style={styles.image} />
-        {item.isFree && (
-          <View style={styles.freeBadge}>
-            <Text style={styles.freeBadgeText}>Бесплатно</Text>
-          </View>
-        )}
-      </View>
-      <View style={styles.cardContent}>
-        <View style={styles.cardHeader}>
-          <Text style={styles.title}>{item.title}</Text>
-          <View style={styles.levelBadge}>
-            <Text style={styles.levelBadgeText}>{item.level}</Text>
-          </View>
+  const renderCourse = ({ item }: { item: any }) => (
+    <View
+      style={{ padding: 10, alignItems: "center", backgroundColor: "#f9fafb" }}>
+      <View style={styles.card}>
+        <View style={styles.imageContainer}>
+          <Image source={{ uri: item?.image_url }} style={styles.image} />
+          {item?.is_free && (
+            <View style={styles.freeBadge}>
+              <Text style={styles.freeBadgeText}>Бесплатно</Text>
+            </View>
+          )}
         </View>
-        <Text style={styles.description} numberOfLines={2}>
-          {item.description}
-        </Text>
-        <View style={styles.metaRow}>
-          <Ionicons name="person-outline" size={16} color="#888" />
-          <Text style={styles.metaText}>{item.author}</Text>
-          <Ionicons
-            name="time-outline"
-            size={16}
-            color="#888"
-            style={{ marginLeft: 10 }}
-          />
-          <Text style={styles.metaText}>{item.duration}</Text>
-        </View>
-        <View style={styles.metaRow}>
-          <Ionicons name="star" size={16} color="#ffc107" />
-          <Text style={styles.metaText}>0 (0 студентов)</Text>
-          <View style={styles.categoryBadge}>
-            <Text style={styles.categoryBadgeText}>{item.category}</Text>
+        <View style={styles.cardContent}>
+          <View style={styles.cardHeader}>
+            <Text style={styles.title}>{item.title}</Text>
+            <View style={styles.levelBadge}>
+              <Text style={styles.levelBadgeText}>{item.level}</Text>
+            </View>
           </View>
+          <Text style={styles.description} numberOfLines={2}>
+            {item.description}
+          </Text>
+          <View style={styles.metaRow}>
+            <Ionicons name="person-outline" size={16} color="#888" />
+            <Text style={styles.metaText}>{item.instructor}</Text>
+            <Ionicons
+              name="time-outline"
+              size={16}
+              color="#888"
+              style={{ marginLeft: 10 }}
+            />
+            <Text style={styles.metaText}>{item.duration}</Text>
+          </View>
+          <View style={styles.metaRow}>
+            <Ionicons name="star" size={16} color="#ffc107" />
+            <Text style={styles.metaText}>0 (0 студентов)</Text>
+            <View style={styles.categoryBadge}>
+              <Text style={styles.categoryBadgeText}>{item.category}</Text>
+            </View>
+          </View>
+          <TouchableOpacity style={styles.detailsButton}>
+            <Text style={styles.detailsButtonText}>Подробнее</Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.detailsButton}>
-          <Text style={styles.detailsButtonText}>Подробнее</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );
@@ -162,7 +116,6 @@ const HomeScreen: React.FC = () => {
       contentContainerStyle={{
         alignItems: "center",
       }}>
-      {/* Logo Row */}
       <View style={styles.logoRow}>
         <Image
           source={require("../../assets/logo.png")}
@@ -174,7 +127,6 @@ const HomeScreen: React.FC = () => {
         </Text>
       </View>
 
-      {/* Badge */}
       <View style={styles.badge}>
         <Ionicons
           name="book-outline"
@@ -185,41 +137,44 @@ const HomeScreen: React.FC = () => {
         <Text style={styles.badgeText}>Качественное онлайн-образование</Text>
       </View>
 
-      {/* Main Title */}
       <Text style={styles.mainTitle}>Изучайте новые{"\n"}навыки</Text>
       <Text style={styles.mainTitleBlue}>онлайн</Text>
 
-      {/* Subtitle */}
       <Text style={styles.subtitle}>
         Получите доступ к качественному образованию от лучших преподавателей.
         Учитесь в удобном темпе и достигайте своих целей.
       </Text>
 
-      {/* Primary Gradient Button */}
-      <TouchableOpacity style={styles.primaryButton}>
-        <LinearGradient
-          colors={["#3ec6f2", "#7c4dff"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={styles.gradient}>
-          <Text style={styles.primaryButtonText}>Начать обучение</Text>
-          <Ionicons
-            name="arrow-forward"
-            size={20}
-            color="#fff"
-            style={{ marginLeft: 8 }}
-          />
-        </LinearGradient>
-      </TouchableOpacity>
+      <View style={{ width: "100%", padding: 20 }}>
+        <TouchableOpacity
+          style={styles.primaryButton}
+          onPress={() => {
+            navigation.navigate("Login");
+          }}>
+          <LinearGradient
+            colors={["#3ec6f2", "#7c4dff"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.gradient}>
+            <Text style={styles.primaryButtonText}>Начать обучение</Text>
+            <Ionicons
+              name="arrow-forward"
+              size={20}
+              color="#fff"
+              style={{ marginLeft: 8 }}
+            />
+          </LinearGradient>
+        </TouchableOpacity>
+      </View>
 
-      {/* Secondary Outlined Button */}
-      <TouchableOpacity style={styles.secondaryButton}>
+      <TouchableOpacity
+        style={styles.secondaryButton}
+        onPress={() => navigation.navigate("Courses")}>
         <Text style={styles.secondaryButtonText}>Посмотреть курсы</Text>
       </TouchableOpacity>
 
-      {/* Stats Section */}
       <View style={styles.statsSection}>
-        {stats.map((stat, idx) => (
+        {stats?.map((stat, idx) => (
           <View style={styles.statCard} key={idx}>
             {stat.icon}
             <Text style={styles.statValue}>{stat.value}</Text>
@@ -228,11 +183,10 @@ const HomeScreen: React.FC = () => {
         ))}
       </View>
 
-      {/* Courses Section */}
       <View style={styles.coursesContainer}>
         <Text style={styles.sectionTitle}>Доступные курсы</Text>
         <FlatList
-          data={courses}
+          data={data?.courses}
           renderItem={renderCourse}
           keyExtractor={(item) => item.id.toString()}
           contentContainerStyle={styles.listContent}
@@ -251,14 +205,18 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   logoRow: {
+    display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    alignSelf: "flex-start",
-    marginBottom: 70,
     backgroundColor: "white",
     width: "100%",
-    padding: 20,
-    paddingTop: 30,
+    height: 90,
+    textAlign: "center",
+    paddingTop: 25,
+    paddingLeft: 25,
+    marginBottom: 30,
+    borderBottomWidth: 1,
+    borderBottomColor: "#e0e0e0",
   },
   logo: {
     width: 100,
@@ -267,15 +225,13 @@ const styles = StyleSheet.create({
   },
   logoText: {
     flexDirection: "row",
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "bold",
     color: "#333",
-    marginLeft: 2,
   },
   logoEdu: {
     color: "#6fd6e8",
-    fontWeight: "bold",
-    fontSize: 24,
+    fontSize: 20,
   },
   badge: {
     flexDirection: "row",
@@ -285,7 +241,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
     marginBottom: 22,
-    marginTop: 4,
+    marginTop: 50,
   },
   badgeText: {
     color: "#1d62e2",
@@ -312,7 +268,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "#4b5563",
     textAlign: "center",
-    marginBottom: 80,
+    marginBottom: 25,
     marginTop: 20,
     lineHeight: 32,
     width: "95%",
@@ -347,15 +303,15 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   secondaryButtonText: {
-    color: "#333",
-    fontSize: 16,
-    fontWeight: "bold",
+    color: "#444151",
+    fontSize: 18,
+    fontWeight: "500",
   },
   statsSection: {
     width: "100%",
-    marginTop: 70,
-    marginBottom: 10,
+    marginTop: 60,
     alignItems: "center",
+    backgroundColor: "#eef2ff",
   },
   statCard: {
     width: "90%",
@@ -391,14 +347,13 @@ const styles = StyleSheet.create({
   },
   coursesContainer: {
     width: "100%",
-    marginTop: 20,
   },
   sectionTitle: {
     fontSize: 22,
     fontWeight: "bold",
     color: "#222",
-    marginBottom: 16,
-    marginLeft: 8,
+    marginBottom: 20,
+    marginLeft: 20,
   },
   listContent: {
     paddingBottom: 24,

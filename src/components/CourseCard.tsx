@@ -44,11 +44,18 @@ const CourseCard: React.FC<CourseCardProps> = ({
             <Text style={styles.levelBadgeText}>{level}</Text>
           </View>
         </View>
-        <Text style={styles.description} numberOfLines={2}>{description}</Text>
+        <Text style={styles.description} numberOfLines={2}>
+          {description}
+        </Text>
         <View style={styles.metaRow}>
           <Ionicons name="person-outline" size={14} color="#666" />
           <Text style={styles.metaText}>{instructor}</Text>
-          <Ionicons name="time-outline" size={14} color="#666" style={{ marginLeft: 8 }} />
+          <Ionicons
+            name="time-outline"
+            size={14}
+            color="#666"
+            style={{ marginLeft: 8 }}
+          />
           <Text style={styles.metaText}>{duration}</Text>
         </View>
         <View style={styles.ratingRow}>
@@ -176,4 +183,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CourseCard; 
+export default CourseCard;

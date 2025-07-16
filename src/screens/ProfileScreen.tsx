@@ -149,6 +149,7 @@ const styles = StyleSheet.create({
   },
   avatarContainer: {
     marginBottom: 16,
+    position: "relative",
   },
   avatar: {
     width: 80,
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     backgroundColor: "#007AFF",
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "flex-end",
   },
   avatarText: {
     fontSize: 32,
