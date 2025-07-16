@@ -101,7 +101,12 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
       </View>
       <View style={styles.mainTitleContainer}>
         <Text style={styles.mainTitle}>
-          <Feather name="book" size={30} color="#2563eb" />
+          <Feather
+            onPress={() => navigation.navigate("MainTabs")}
+            name="book"
+            size={30}
+            color="#2563eb"
+          />
           Can Education
         </Text>
       </View>

@@ -5,9 +5,10 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Image,
+  FlatList,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import CourseCard from "../components/CourseCard";
 import { useCourses } from "../features/courses/service/useCourses";
 
 interface CourseListScreenProps {
@@ -19,33 +20,6 @@ const CourseListScreen: React.FC<CourseListScreenProps> = ({ navigation }) => {
 
   const { getCourses } = useCourses();
   const { data } = getCourses;
-
-  console.log(data?.courses);
-
-  const renderCourseItem = ({ item }: { item: any }) => (
-    <TouchableOpacity style={styles.courseItem}>
-      <Image source={{ uri: item.imageUrl }} style={styles.courseImage} />
-      <View style={styles.courseInfo}>
-        <Text style={styles.courseTitle}>{item.title}</Text>
-        <Text style={styles.courseCategory}>{item.category}</Text>
-        <Text style={styles.courseDescription} numberOfLines={2}>
-          {item.description}
-        </Text>
-        <View style={styles.courseMetrics}>
-          <Text style={styles.courseMetric}>
-            <Ionicons name="time-outline" size={12} color="#666" />{" "}
-            {item.duration}
-          </Text>
-          <Text style={styles.courseMetric}>
-            <Ionicons name="book-outline" size={12} color="#666" />{" "}
-            {item.lessonsCount} lessons
-          </Text>
-          <Text style={styles.courseLevel}>{item.level}</Text>
-        </View>
-        {item.isEnrolled && <Text style={styles.enrolledBadge}>Enrolled</Text>}
-      </View>
-    </TouchableOpacity>
-  );
 
   return (
     <View style={styles.container}>
@@ -76,6 +50,27 @@ const CourseListScreen: React.FC<CourseListScreenProps> = ({ navigation }) => {
           </TouchableOpacity>
         </View>
       )}
+
+      <FlatList
+        data={data?.courses}
+        keyExtractor={(item, idx) => item.title + idx}
+        renderItem={({ item }) => (
+          <CourseCard
+            imageUrl={item?.image_url}
+            isFree={item.isFree}
+            title={item.title}
+            level={item.level}
+            description={item.description}
+            instructor={item.instructor}
+            duration={item.duration}
+            rating={item.rating}
+            studentsCount={item.studentsCount}
+            category={item.category}
+            onPress={() => {}}
+          />
+        )}
+        contentContainerStyle={{ padding: 16 }}
+      />
     </View>
   );
 };
@@ -145,70 +140,6 @@ const styles = StyleSheet.create({
   },
   courseList: {
     padding: 16,
-  },
-  courseItem: {
-    flexDirection: "row",
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  courseImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 8,
-    marginRight: 16,
-  },
-  courseInfo: {
-    flex: 1,
-  },
-  courseTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#333",
-    marginBottom: 4,
-  },
-  courseCategory: {
-    fontSize: 14,
-    color: "#007AFF",
-    marginBottom: 4,
-    textTransform: "capitalize",
-  },
-  courseDescription: {
-    fontSize: 14,
-    color: "#666",
-    marginBottom: 8,
-  },
-  courseMetrics: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 8,
-  },
-  courseMetric: {
-    fontSize: 12,
-    color: "#666",
-    marginRight: 16,
-  },
-  courseLevel: {
-    fontSize: 12,
-    color: "#007AFF",
-    fontWeight: "600",
-    textTransform: "capitalize",
-  },
-  enrolledBadge: {
-    fontSize: 12,
-    color: "#28a745",
-    fontWeight: "600",
-    backgroundColor: "#e8f5e8",
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 4,
-    alignSelf: "flex-start",
   },
 });
 
