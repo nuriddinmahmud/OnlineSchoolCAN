@@ -33,7 +33,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
         {
           onSuccess: () => {
             Alert.alert("Вход успешен", "Вы можете продолжить обучение");
-            navigation.navigate("HomeScreen");
+            navigation.navigate("MainTabs");
           },
           onError: () => {
             Alert.alert("Ошибка входа", "Неверные учетные данные для входа");

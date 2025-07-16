@@ -10,6 +10,14 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import { useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from "../navigation/types";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
+type HomeScreenNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  "Home"
+>;
 
 const courses = [
   {
@@ -75,6 +83,7 @@ const courses = [
 ];
 
 const HomeScreen: React.FC = () => {
+  const navigation = useNavigation<HomeScreenNavigationProp>();
   const stats = [
     {
       icon: (
@@ -196,21 +205,27 @@ const HomeScreen: React.FC = () => {
       </Text>
 
       {/* Primary Gradient Button */}
-      <TouchableOpacity style={styles.primaryButton}>
-        <LinearGradient
-          colors={["#3ec6f2", "#7c4dff"]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={styles.gradient}>
-          <Text style={styles.primaryButtonText}>Начать обучение</Text>
-          <Ionicons
-            name="arrow-forward"
-            size={20}
-            color="#fff"
-            style={{ marginLeft: 8 }}
-          />
-        </LinearGradient>
-      </TouchableOpacity>
+      <View style={{ width: "100%", padding: 20 }}>
+        <TouchableOpacity
+          style={styles.primaryButton}
+          onPress={() => {
+            navigation.navigate("Login");
+          }}>
+          <LinearGradient
+            colors={["#3ec6f2", "#7c4dff"]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={styles.gradient}>
+            <Text style={styles.primaryButtonText}>Начать обучение</Text>
+            <Ionicons
+              name="arrow-forward"
+              size={20}
+              color="#fff"
+              style={{ marginLeft: 8 }}
+            />
+          </LinearGradient>
+        </TouchableOpacity>
+      </View>
 
       {/* Secondary Outlined Button */}
       <TouchableOpacity style={styles.secondaryButton}>
@@ -312,7 +327,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "#4b5563",
     textAlign: "center",
-    marginBottom: 80,
+    marginBottom: 25,
     marginTop: 20,
     lineHeight: 32,
     width: "95%",
@@ -347,9 +362,9 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   secondaryButtonText: {
-    color: "#333",
-    fontSize: 16,
-    fontWeight: "bold",
+    color: "#444151",
+    fontSize: 18,
+    fontWeight: "500",
   },
   statsSection: {
     width: "100%",

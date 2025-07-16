@@ -8,6 +8,7 @@ import {
   Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useCourses } from "../features/courses/service/useCourses";
 
 interface CourseListScreenProps {
   navigation: any;
@@ -15,6 +16,11 @@ interface CourseListScreenProps {
 
 const CourseListScreen: React.FC<CourseListScreenProps> = ({ navigation }) => {
   const [showCategoryFilter, setShowCategoryFilter] = useState(false);
+
+  const { getCourses } = useCourses();
+  const { data } = getCourses;
+
+  console.log(data?.courses);
 
   const renderCourseItem = ({ item }: { item: any }) => (
     <TouchableOpacity style={styles.courseItem}>
