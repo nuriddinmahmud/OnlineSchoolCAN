@@ -66,7 +66,7 @@ const CourseListScreen: React.FC<CourseListScreenProps> = ({ navigation }) => {
             rating={item.rating}
             studentsCount={item.studentsCount}
             category={item.category}
-            onPress={() => {}}
+            onPress={() => navigation.navigate("CourseDetail")}
           />
         )}
         contentContainerStyle={{ padding: 16 }}
