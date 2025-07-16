@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import CourseCard from "../components/CourseCard";
+import CourseDetailScreen from "./CourseDetailScreen";
 
 interface CourseListScreenProps {
   navigation: any;
@@ -114,7 +115,7 @@ const CourseListScreen: React.FC<CourseListScreenProps> = ({ navigation }) => {
             rating={item.rating}
             studentsCount={item.studentsCount}
             category={item.category}
-            onPress={() => {}}
+            onPress={() => navigation.navigate("CourseDetail")}
           />
         )}
         contentContainerStyle={{ padding: 16 }}
