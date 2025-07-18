@@ -123,7 +123,7 @@ const ProfileScreen: React.FC = () => {
       <View style={styles.logoutContainer}>
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
           <Ionicons name="log-out-outline" size={24} color="#dc3545" />
-          <Text style={styles.logoutText}>Logout</Text>
+          <Text style={styles.logoutText}>Выход из системы</Text>
         </TouchableOpacity>
       </View>
 

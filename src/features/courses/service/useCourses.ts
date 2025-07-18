@@ -11,7 +11,7 @@ export const useCourses = () => {
 
   const getCourse = (id: string) =>
     useQuery({
-      queryKey: [courses],
+      queryKey: [courses, id],
       queryFn: () => api.get(`/courses/${id}`).then((res) => res.data),
     });
 

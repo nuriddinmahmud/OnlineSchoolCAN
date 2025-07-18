@@ -18,12 +18,12 @@ const CoursesStack = () => {
       <Stack.Screen
         name="CourseList"
         component={CourseListScreen}
-        options={{ title: "Courses" }}
+        options={{ title: "Курсы" }}
       />
       <Stack.Screen
         name="CourseDetail"
         component={CourseDetailScreen}
-        options={{ title: "Курс" }}
+        options={{ title: "Курсы" }}
       />
     </Stack.Navigator>
   );
@@ -65,6 +65,7 @@ const MainNavigator = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="MainTabs" component={MainTabs} />
     <Stack.Screen name="Login" component={LoginScreen} />
+    <Stack.Screen name="CourseDetail" component={CourseDetailScreen} />
   </Stack.Navigator>
 );
 
