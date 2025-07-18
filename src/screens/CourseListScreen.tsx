@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#f0f0f0",
-    borderRadius: 8,
+    borderRadius: 20,
     paddingHorizontal: 12,
   },
   searchIcon: {

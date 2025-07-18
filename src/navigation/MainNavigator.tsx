@@ -8,6 +8,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 import HomeScreen from "../screens/HomeScreen";
 import LoginScreen from "../screens/LoginScreen";
 import CourseDetailScreen from "../screens/CourseDetailScreen";
+import LessonDetailScreen from "../screens/LessonDetailScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -21,9 +22,9 @@ const CoursesStack = () => {
         options={{ title: "Курсы" }}
       />
       <Stack.Screen
-        name="CourseDetail"
-        component={CourseDetailScreen}
-        options={{ title: "Курсы" }}
+        name="LessonDetail"
+        component={LessonDetailScreen}
+        options={{ headerShown: true, title: "Назад к курсу" }}
       />
     </Stack.Navigator>
   );

@@ -106,10 +106,18 @@ const HomeScreen: React.FC = () => {
             <Text style={styles.metaText}>{item.duration}</Text>
           </View>
           <View style={styles.metaRow}>
-            <Ionicons name="star" size={16} color="#ffc107" />
-            <Text style={styles.metaText}>0 (0 студентов)</Text>
-            <View style={styles.categoryBadge}>
-              <Text style={styles.categoryBadgeText}>{item.category}</Text>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+              }}>
+              <View style={{ flexDirection: "row" }}>
+                <Ionicons name="star" size={16} color="#ffc107" />
+                <Text style={styles.metaText}>0 (0 студентов)</Text>
+              </View>
+              <View style={styles.categoryBadge}>
+                <Text style={styles.categoryBadgeText}>{item.category}</Text>
+              </View>
             </View>
           </View>
           <TouchableOpacity
@@ -140,7 +148,6 @@ const HomeScreen: React.FC = () => {
           <Text style={styles.logoEdu}> Education</Text>
         </Text>
       </View>
-
       <View style={styles.badge}>
         <Ionicons
           name="book-outline"
@@ -227,7 +234,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     paddingTop: 25,
     paddingLeft: 25,
-    marginBottom: 30,
     borderBottomWidth: 1,
     borderBottomColor: "#e0e0e0",
   },
@@ -450,10 +456,10 @@ const styles = StyleSheet.create({
   },
   categoryBadge: {
     backgroundColor: "#f3f4f6",
-    borderRadius: 10,
+    borderRadius: 20,
     paddingHorizontal: 10,
     paddingVertical: 3,
-    marginLeft: 8,
+    // marginLeft: 70,
   },
   categoryBadgeText: {
     color: "#222",

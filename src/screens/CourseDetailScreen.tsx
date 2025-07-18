@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,14 +7,21 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Feather, Ionicons } from "@expo/vector-icons";
-import { useRoute } from "@react-navigation/native";
+import { useRoute, useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import type { RootStackParamList } from "../navigation/types";
 import { useCourses } from "../features/courses/service/useCourses";
+import CourseListScreen from "./CourseListScreen";
 
 const CourseDetailScreen = () => {
   const route = useRoute();
   const { courseId } = route.params as { courseId: string };
   const { getCourse } = useCourses();
   const { data, isLoading, error } = getCourse(courseId);
+  const [enrolled, setEnrolled] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   if (isLoading) {
     return (
@@ -32,112 +39,158 @@ const CourseDetailScreen = () => {
   }
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.badgesRow}>
-        {data?.course?.category && (
-          <View style={[styles.badge, styles.badgeCategory]}>
-            <Text style={[styles.badgeText, styles.badgeTextCategory]}>
-              {data.course.category}
-            </Text>
-          </View>
-        )}
-        {data?.course?.level && (
-          <View style={[styles.badge, styles.badgeLevel]}>
-            <Text style={[styles.badgeText, styles.badgeTextLevel]}>
-              {data.course.level}
-            </Text>
-          </View>
-        )}
-        {data?.course?.is_free && (
-          <View style={[styles.badge, styles.badgeFree]}>
-            <Text style={[styles.badgeText, styles.badgeTextFree]}>
-              Бесплатно
-            </Text>
-          </View>
-        )}
+    <View style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
+      <View style={styles.headerBar}>
+        <TouchableOpacity
+          style={styles.headerBackBtn}
+          onPress={() => navigation.goBack()}>
+          <Feather name="arrow-left" size={28} color="#111" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Назад</Text>
       </View>
-      <Text style={styles.title}>{data?.course?.title}</Text>
-      <Text style={styles.description}>{data?.course?.description}</Text>
-      <View style={styles.metaRow}>
-        <Ionicons name="person-outline" size={16} color="#666" />
-        <Text style={styles.metaText}>{data?.course?.instructor}</Text>
-        <Ionicons
-          name="time-outline"
-          size={16}
-          color="#666"
-          style={{ marginLeft: 8 }}
-        />
-        <Text style={styles.metaText}>{data?.course?.duration}</Text>
-        <Ionicons
-          name="star"
-          size={16}
-          color="#FFC107"
-          style={{ marginLeft: 8 }}
-        />
-        <Text style={styles.metaText}>{data?.course?.rating} (0 отзывов)</Text>
-      </View>
-      <TouchableOpacity style={styles.enrollButton}>
-        <Text style={styles.enrollButtonText}>Записаться на курс</Text>
-      </TouchableOpacity>
-      <View style={styles.sectionBox}>
-        <View style={styles.sectionBoxTitleandIcon}>
-          <Feather name="book" size={25} color="#000" />
-          <Text style={styles.sectionTitle}>Содержание курса</Text>
-        </View>
-        {Array.isArray(data?.course?.lessons) &&
-          data.course.lessons.length > 0 && (
-            <View
-              style={{
-                marginBottom: 20,
-                gap: 20,
-              }}>
-              {data.course.lessons.map((lesson: any, idx: number) => (
-                <View key={lesson.id || idx} style={styles.lessonCard}>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignItems: "center",
-                      marginBottom: 4,
-                    }}>
-                    <Text style={styles.lessonTitle}>
-                      {idx + 1}. {lesson.title}
-                    </Text>
-                    <Ionicons
-                      name="videocam-outline"
-                      size={16}
-                      color="#3b82f6"
-                      style={{ marginLeft: 6, marginRight: 4 }}
-                    />
-                    <Text style={styles.lessonDuration}>{lesson.duration}</Text>
-                  </View>
-                  <Text style={styles.lessonDescription}>
-                    {lesson.description.slice(0, 100)}
-                  </Text>
-                </View>
-              ))}
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={{ paddingBottom: 32 }}>
+        <View style={styles.badgesRow}>
+          {data?.course?.category && (
+            <View style={[styles.badge, styles.badgeCategory]}>
+              <Text style={[styles.badgeText, styles.badgeTextCategory]}>
+                {data.course.category}
+              </Text>
             </View>
           )}
-      </View>
+          {data?.course?.level && (
+            <View style={[styles.badge, styles.badgeLevel]}>
+              <Text style={[styles.badgeText, styles.badgeTextLevel]}>
+                {data.course.level}
+              </Text>
+            </View>
+          )}
+          {data?.course?.is_free && (
+            <View style={[styles.badge, styles.badgeFree]}>
+              <Text style={[styles.badgeText, styles.badgeTextFree]}>
+                Бесплатно
+              </Text>
+            </View>
+          )}
+        </View>
+        <Text style={styles.title}>{data?.course?.title}</Text>
+        <Text style={styles.description}>{data?.course?.description}</Text>
+        <View style={styles.metaRow}>
+          <Ionicons name="person-outline" size={16} color="#666" />
+          <Text style={styles.metaText}>{data?.course?.instructor}</Text>
+          <Ionicons
+            name="time-outline"
+            size={16}
+            color="#666"
+            style={{ marginLeft: 8 }}
+          />
+          <Text style={styles.metaText}>{data?.course?.duration}</Text>
+          <Ionicons
+            name="star"
+            size={16}
+            color="#FFC107"
+            style={{ marginLeft: 8 }}
+          />
+          <Text style={styles.metaText}>
+            {data?.course?.rating} (0 отзывов)
+          </Text>
+        </View>
+        <View>
+          {!enrolled ? (
+            <TouchableOpacity
+              style={styles.enrollButton}
+              onPress={() => setEnrolled(true)}>
+              <Text style={styles.enrollButtonText}>Записаться на курс</Text>
+            </TouchableOpacity>
+          ) : (
+            <>
+              <TouchableOpacity
+                style={[
+                  styles.enrollButton,
+                  { backgroundColor: "#000", marginBottom: 10 },
+                ]}
+                onPress={() => {
+                  if (data?.course?.lessons && data.course.lessons.length > 0) {
+                    navigation.navigate("LessonDetail", {
+                      lesson: data.course.lessons[0],
+                    });
+                  }
+                }}>
+                <Text style={styles.enrollButtonText}>Начать обучение</Text>
+              </TouchableOpacity>
+              <View style={styles.progress}>
+                <Text style={styles.progressContainerText}>Прогресс курса</Text>
+                <Text style={styles.progressText}>{progress}%</Text>
+              </View>
+              <View style={styles.progressContainer}>
+                <View style={[styles.progressBar, { width: `${progress}%` }]} />
+              </View>
+            </>
+          )}
+        </View>
+        <View style={styles.sectionBox}>
+          <View style={styles.sectionBoxTitleandIcon}>
+            <Feather name="book" size={25} color="#000" />
+            <Text style={styles.sectionTitle}>Содержание курса</Text>
+          </View>
+          {Array.isArray(data?.course?.lessons) &&
+            data.course.lessons.length > 0 && (
+              <View
+                style={{
+                  marginBottom: 20,
+                  gap: 20,
+                }}>
+                {data.course.lessons.map((lesson: any, idx: number) => (
+                  <View key={lesson.id || idx} style={styles.lessonCard}>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        marginBottom: 4,
+                      }}>
+                      <Text style={styles.lessonTitle}>
+                        {idx + 1}. {lesson.title}
+                      </Text>
+                      <Ionicons
+                        name="videocam-outline"
+                        size={16}
+                        color="#3b82f6"
+                        style={{ marginLeft: 6, marginRight: 4 }}
+                      />
+                      <Text style={styles.lessonDuration}>
+                        {lesson.duration}
+                      </Text>
+                    </View>
+                    <Text style={styles.lessonDescription}>
+                      {lesson.description}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            )}
+        </View>
 
-      <View style={styles.sectionBoxInfo}>
-        <Text style={styles.sectionBoxTitle}>Информация о курсе</Text>
-        <Text style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Уровень: </Text>
-          {data?.course?.level}
-        </Text>
-        <Text style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Длительность: </Text>
-          {data?.course?.duration}
-        </Text>
-        <Text style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Количество уроков: </Text>3 уроков
-        </Text>
-        <Text style={styles.infoRow}>
-          <Text style={styles.infoLabel}>Преподаватель: </Text>
-          {data?.course?.instructor}
-        </Text>
-      </View>
-    </ScrollView>
+        <View style={styles.sectionBoxInfo}>
+          <Text style={styles.sectionBoxTitle}>Информация о курсе</Text>
+          <Text style={styles.infoRow}>
+            <Text style={styles.infoLabel}>Уровень: </Text>
+            {data?.course?.level}
+          </Text>
+          <Text style={styles.infoRow}>
+            <Text style={styles.infoLabel}>Длительность: </Text>
+            {data?.course?.duration}
+          </Text>
+          <Text style={styles.infoRow}>
+            <Text style={styles.infoLabel}>Количество уроков: </Text>3 уроков
+          </Text>
+          <Text style={styles.infoRow}>
+            <Text style={styles.infoLabel}>Преподаватель: </Text>
+            {data?.course?.instructor}
+          </Text>
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -146,11 +199,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f5f5f5",
     padding: 16,
-    marginTop: 50,
   },
   badgesRow: {
     flexDirection: "row",
-    marginBottom: 12,
+    marginBottom: 10,
     flexWrap: "wrap",
     gap: 5,
   },
@@ -293,6 +345,69 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 500,
     color: "#111827",
+  },
+  progress: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingBottom: 5,
+  },
+  progressContainer: {
+    height: 30,
+    backgroundColor: "#f1f5f9",
+    borderRadius: 20,
+    overflow: "hidden",
+    marginBottom: 18,
+    marginTop: 2,
+    flexDirection: "row",
+    alignItems: "center",
+    position: "relative",
+    borderWidth: 1,
+    borderColor: "#e2e8f0",
+  },
+  progressBar: {
+    height: 30,
+    backgroundColor: "#000",
+    borderRadius: 20,
+    position: "absolute",
+    left: 0,
+    top: 0,
+    bottom: 0,
+    zIndex: 1,
+  },
+  progressText: {
+    zIndex: 2,
+    color: "#111827",
+    fontWeight: "bold",
+    fontSize: 16,
+    marginLeft: "auto",
+    marginRight: 8,
+  },
+  progressContainerText: {
+    fontSize: 16,
+    fontWeight: 500,
+  },
+  headerBar: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingTop: 50,
+    paddingBottom: 12,
+    backgroundColor: "#fff",
+    paddingHorizontal: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f1f5f9",
+    elevation: 2,
+    zIndex: 10,
+  },
+  headerBackBtn: {
+    padding: 4,
+    marginRight: 8,
+  },
+  headerTitle: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#111",
+    flex: 1,
+    textAlign: "left",
   },
 });
 
