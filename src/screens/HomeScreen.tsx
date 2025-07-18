@@ -214,6 +214,21 @@ const HomeScreen: React.FC = () => {
           scrollEnabled={false}
         />
       </View>
+      {/* Stats Section (after courses) */}
+      <View style={styles.statsBlock}>
+        <View style={styles.statItemBlock}>
+          <Text style={[styles.statNumber, { color: "#2563eb" }]}>50+</Text>
+          <Text style={styles.statText}>Курсов</Text>
+        </View>
+        <View style={styles.statItemBlock}>
+          <Text style={[styles.statNumber, { color: "#22c55e" }]}>1000+</Text>
+          <Text style={styles.statText}>Студентов</Text>
+        </View>
+        <View style={styles.statItemBlock}>
+          <Text style={[styles.statNumber, { color: "#9333ea" }]}>95%</Text>
+          <Text style={styles.statText}>Завершили курсы</Text>
+        </View>
+      </View>
     </ScrollView>
   );
 };
@@ -459,7 +474,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 10,
     paddingVertical: 3,
-    // marginLeft: 70,
   },
   categoryBadgeText: {
     color: "#222",
@@ -477,6 +491,35 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  statsBlock: {
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    marginTop: 30,
+    marginBottom: 30,
+    alignItems: "center",
+    paddingVertical: 30,
+    width: "90%",
+    alignSelf: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  statItemBlock: {
+    alignItems: "center",
+    marginBottom: 28,
+  },
+  statNumber: {
+    fontSize: 38,
+    fontWeight: "bold",
+    marginBottom: 2,
+  },
+  statText: {
+    fontSize: 18,
+    color: "#444",
+    marginBottom: 2,
   },
 });
 
