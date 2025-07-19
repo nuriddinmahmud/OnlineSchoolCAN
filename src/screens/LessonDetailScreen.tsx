@@ -1,22 +1,55 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import { useRoute } from "@react-navigation/native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Feather, Ionicons } from "@expo/vector-icons";
+import { useLessons } from "../features/lessons/service/useLessons";
+import { Video } from "expo-av";
 
 const LessonDetailScreen = () => {
+  const navigation = useNavigation();
   const route = useRoute();
-  const {
-    lesson,
-    allLessons = [],
-    currentLessonIndex = 0,
-  } = route.params as any;
+  const { lessonId, courseId } = route.params as {
+    lessonId: string;
+    courseId?: string;
+  };
+
+  const { getLesson } = useLessons();
+  const { data, isLoading, error } = getLesson(lessonId, courseId);
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text style={{ fontSize: 25, fontWeight: 500 }}>Загрузка...</Text>
+      </View>
+    );
+  }
+  if (error || !data) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text style={{ fontSize: 25, fontWeight: 500 }}>
+          Ошибка загрузки урока
+        </Text>
+        <Text style={{ fontSize: 16, color: "#666", marginTop: 10 }}>
+          {error?.message || "Данные не найдены"}
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <View>
+      <View style={styles.headerBar}>
+        <TouchableOpacity
+          style={styles.headerBackBtn}
+          onPress={() => navigation.goBack()}>
+          <Feather name="arrow-left" size={28} color="#111" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Назад</Text>
+      </View>
       <View style={styles.container}>
         <View style={styles.headerRow}>
           <Feather name="book" size={20} color="#22c55e" />
-          <Text style={styles.title}>{lesson.title}</Text>
+          <Text style={styles.title}>{data?.lesson?.title}</Text>
           <View style={styles.testBadge}>
             <Ionicons name="document-text-outline" size={14} color="#000" />
             <Text style={styles.testBadgeText}>Тест</Text>
@@ -24,13 +57,15 @@ const LessonDetailScreen = () => {
         </View>
         <View style={styles.metaRow}>
           <Ionicons name="time-outline" size={16} color="#666" />
-          <Text style={styles.duration}>{lesson.duration}</Text>
+          <Text style={styles.duration}>{data?.lesson?.duration}</Text>
         </View>
-        <Text style={styles.description}>{lesson.description}</Text>
+        <Text style={styles.description}>{data?.lesson?.description}</Text>
         <View style={styles.videoPreview}>
-          <Image
+          <Video
             source={{
-              uri: lesson.image_url || "https://placehold.co/320x120/png",
+              uri:
+                data?.lesson?.video_url ||
+                "https://www.youtube.com/watch?v=hjaq5_YGU6A",
             }}
             style={styles.videoImage}
           />
@@ -44,51 +79,6 @@ const LessonDetailScreen = () => {
           <Ionicons name="document-text-outline" size={18} color="#2563eb" />
           <Text style={styles.testButtonText}>Пройти тест</Text>
         </TouchableOpacity>
-      </View>
-      <View style={styles.sidebarContainer}>
-        <Text style={styles.sidebarTitle}>Содержание курса</Text>
-        {allLessons.map((l: any, idx: number) => {
-          const isCurrent = idx === currentLessonIndex;
-          const isLocked = idx > currentLessonIndex;
-          return (
-            <View
-              key={l.id || idx}
-              style={[
-                styles.sidebarLessonCard,
-                isCurrent && styles.sidebarLessonCardActive,
-                isLocked && styles.sidebarLessonCardLocked,
-              ]}>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                {isLocked ? (
-                  <Feather
-                    name="lock"
-                    size={16}
-                    color="#cbd5e1"
-                    style={{ marginRight: 6 }}
-                  />
-                ) : (
-                  <Text style={styles.sidebarLessonNumber}>{idx + 1}.</Text>
-                )}
-                <Text
-                  style={[
-                    styles.sidebarLessonTitle,
-                    isCurrent && styles.sidebarLessonTitleActive,
-                    isLocked && styles.sidebarLessonTitleLocked,
-                  ]}>
-                  {l.title}
-                </Text>
-                {l.has_test && !isLocked && (
-                  <Ionicons
-                    name="document-text-outline"
-                    size={16}
-                    color="#000"
-                    style={{ marginLeft: 6 }}
-                  />
-                )}
-              </View>
-            </View>
-          );
-        })}
       </View>
     </View>
   );
@@ -247,6 +237,29 @@ const styles = StyleSheet.create({
   },
   sidebarLessonTitleLocked: {
     color: "#cbd5e1",
+  },
+  headerBar: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingTop: 50,
+    paddingBottom: 12,
+    backgroundColor: "#fff",
+    paddingHorizontal: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f1f5f9",
+    elevation: 2,
+    zIndex: 10,
+  },
+  headerBackBtn: {
+    padding: 4,
+    marginRight: 8,
+  },
+  headerTitle: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#111",
+    flex: 1,
+    textAlign: "left",
   },
 });
 

@@ -11,7 +11,6 @@ import { useRoute, useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "../navigation/types";
 import { useCourses } from "../features/courses/service/useCourses";
-import CourseListScreen from "./CourseListScreen";
 
 const CourseDetailScreen = () => {
   const route = useRoute();
@@ -26,14 +25,16 @@ const CourseDetailScreen = () => {
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text>Загрузка...</Text>
+        <Text style={{ fontSize: 25, fontWeight: 500 }}>Загрузка...</Text>
       </View>
     );
   }
   if (error || !data) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Text>Ошибка загрузки курса</Text>
+        <Text style={{ fontSize: 25, fontWeight: 500 }}>
+          Ошибка загрузки курса
+        </Text>
       </View>
     );
   }
@@ -112,8 +113,13 @@ const CourseDetailScreen = () => {
                 ]}
                 onPress={() => {
                   if (data?.course?.lessons && data.course.lessons.length > 0) {
+                    const firstLesson = data.course.lessons[0];
                     navigation.navigate("LessonDetail", {
-                      lesson: data.course.lessons[0],
+                      lessonId:
+                        firstLesson.id ||
+                        firstLesson.lessonId ||
+                        firstLesson._id,
+                      courseId: courseId,
                     });
                   }
                 }}>

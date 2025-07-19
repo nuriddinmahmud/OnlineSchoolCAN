@@ -3,5 +3,5 @@ export type RootStackParamList = {
   Login: undefined;
   Courses: undefined;
   CourseDetail: { courseId: string };
-  LessonDetail: { lesson: any };
+  LessonDetail: { lessonId: string; courseId?: string };
 };
