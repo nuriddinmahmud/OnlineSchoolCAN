@@ -14,7 +14,6 @@ export const useLessons = () => {
       queryKey: [lessons, lessonId],
       queryFn: async () => {
         try {
-          // Try different endpoint patterns
           const endpoints = [
             `/lessons/${lessonId}`,
             `/courses/${courseId}/lessons/${lessonId}`,
@@ -24,7 +23,6 @@ export const useLessons = () => {
           for (const endpoint of endpoints) {
             try {
               const response = await api.get(endpoint);
-              console.log("API Response:", response.data);
               return response.data;
             } catch (error) {
               console.log(`Failed endpoint ${endpoint}:`, error);

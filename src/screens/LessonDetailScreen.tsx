@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { useLessons } from "../features/lessons/service/useLessons";
-import { Video } from "expo-av";
+import VideoPlayer from "react-native-video-player";
 
 const LessonDetailScreen = () => {
   const navigation = useNavigation();
@@ -61,15 +61,11 @@ const LessonDetailScreen = () => {
         </View>
         <Text style={styles.description}>{data?.lesson?.description}</Text>
         <View style={styles.videoPreview}>
-          <Video
-            source={{
-              uri:
-                data?.lesson?.video_url ||
-                "https://www.youtube.com/watch?v=hjaq5_YGU6A",
-            }}
-            style={styles.videoImage}
-          />
           <View style={styles.playButtonOverlay}>
+            <VideoPlayer
+              source={{ uri: data?.lesson?.video_url }}
+              autoplay={true}
+            />
             <Ionicons name="play-circle" size={48} color="#fff" />
           </View>
         </View>
