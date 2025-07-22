@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { useLessons } from "../features/lessons/service/useLessons";
-import VideoPlayer from "react-native-video-player";
+import { useVideoPlayer, VideoView } from "expo-video";
 
 const LessonDetailScreen = () => {
   const navigation = useNavigation();
@@ -15,6 +15,9 @@ const LessonDetailScreen = () => {
 
   const { getLesson } = useLessons();
   const { data, isLoading, error } = getLesson(lessonId, courseId);
+
+  const lessonUrl = data?.lesson?.video_url ?? null;
+  const player = useVideoPlayer(lessonUrl);
 
   if (isLoading) {
     return (
@@ -61,13 +64,12 @@ const LessonDetailScreen = () => {
         </View>
         <Text style={styles.description}>{data?.lesson?.description}</Text>
         <View style={styles.videoPreview}>
-          <View style={styles.playButtonOverlay}>
-            <VideoPlayer
-              source={{ uri: data?.lesson?.video_url }}
-              autoplay={true}
-            />
-            <Ionicons name="play-circle" size={48} color="#fff" />
-          </View>
+          <VideoView
+            player={player}
+            style={{ width: "100%", height: 200, borderRadius: 8 }}
+            nativeControls
+            contentFit="contain"
+          />
         </View>
       </View>
       <View style={styles.testContainer}>
