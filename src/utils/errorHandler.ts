@@ -1,34 +1,34 @@
 import { Alert } from "react-native";
 
 export const handleApiError = (error: any) => {
-  let message = "An unexpected error occurred";
+  let message = "Произошла непредвиденная ошибка";
 
   if (error.response) {
     switch (error.response.status) {
       case 400:
-        message = "Invalid request. Please check your input.";
+        message = "Некорректный запрос. Пожалуйста, проверьте введённые данные.";
         break;
       case 401:
-        message = "Authentication failed. Please login again.";
+        message = "Ошибка аутентификации. Пожалуйста, войдите снова.";
         break;
       case 403:
-        message = "You do not have permission to perform this action.";
+        message = "У вас нет прав для выполнения этого действия.";
         break;
       case 404:
-        message = "The requested resource was not found.";
+        message = "Запрошенный ресурс не найден.";
         break;
       case 422:
-        message = error.response.data?.message || "Validation error occurred.";
+        message = error.response.data?.message || "Произошла ошибка валидации.";
         break;
       case 500:
-        message = "Server error. Please try again later.";
+        message = "Ошибка сервера. Пожалуйста, попробуйте позже.";
         break;
       default:
-        message = error.response.data?.message || "Network error occurred.";
+        message = error.response.data?.message || "Произошла сетевая ошибка.";
     }
   } else if (error.request) {
     message =
-      "Network connection failed. Please check your internet connection.";
+      "Сбой сетевого соединения. Пожалуйста, проверьте подключение к интернету.";
   } else if (error.message) {
     message = error.message;
   }
@@ -36,7 +36,7 @@ export const handleApiError = (error: any) => {
   return message;
 };
 
-export const showErrorAlert = (error: any, title: string = "Error") => {
+export const showErrorAlert = (error: any, title: string = "Ошибка") => {
   const message = handleApiError(error);
   Alert.alert(title, message);
 };

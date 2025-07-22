@@ -6,8 +6,9 @@ import { Ionicons } from "@expo/vector-icons";
 import CourseListScreen from "../screens/CourseListScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import HomeScreen from "../screens/HomeScreen";
-import CourseDetailScreen from "../screens/CourseDetailScreen";
 import LoginScreen from "../screens/LoginScreen";
+import CourseDetailScreen from "../screens/CourseDetailScreen";
+import LessonDetailScreen from "../screens/LessonDetailScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -18,12 +19,12 @@ const CoursesStack = () => {
       <Stack.Screen
         name="CourseList"
         component={CourseListScreen}
-        options={{ title: "Courses" }}
+        options={{ title: "Курсы" }}
       />
       <Stack.Screen
-        name="CourseDetail"
-        component={CourseDetailScreen}
-        options={{ title: "Курс" }}
+        name="LessonDetail"
+        component={LessonDetailScreen}
+        options={{ headerShown: true, title: "Назад к курсу" }}
       />
     </Stack.Navigator>
   );
@@ -55,16 +56,18 @@ const MainTabs = () => (
       tabBarInactiveTintColor: "gray",
       headerShown: false,
     })}>
-    <Tab.Screen name="Home" component={HomeScreen} />
-    <Tab.Screen name="Courses" component={CoursesStack} />
-    <Tab.Screen name="Profile" component={ProfileScreen} />
+    <Tab.Screen name="Home" component={HomeScreen} options={{ tabBarLabel: 'Главная' }} />
+    <Tab.Screen name="Courses" component={CoursesStack} options={{ tabBarLabel: 'Курсы' }} />
+    <Tab.Screen name="Profile" component={ProfileScreen} options={{ tabBarLabel: 'Профиль' }} />
   </Tab.Navigator>
 );
 
 const MainNavigator = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="MainTabs" component={MainTabs} />
-    <Stack.Screen name="Login" component={LoginScreen} />   
+    <Stack.Screen name="Login" component={LoginScreen} />
+    <Stack.Screen name="CourseDetail" component={CourseDetailScreen} />
+    <Stack.Screen name="LessonDetail" component={LessonDetailScreen} />
   </Stack.Navigator>
 );
 

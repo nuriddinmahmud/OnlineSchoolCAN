@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "../../../shared/lib/axios";
 import { ILoginBody, IRegisterBody } from "../../../shared/types";
+import { auth } from "../../keys";
 
 export const useAuth = () => {
   const queryClient = useQueryClient();
-  const auth = "auth";
 
   const register = useMutation({
     mutationFn: (body: IRegisterBody) =>

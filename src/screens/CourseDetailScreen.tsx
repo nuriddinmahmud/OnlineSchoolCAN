@@ -1,99 +1,202 @@
-import React from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-
-const placeholderCourse = {
-  title: "HTML",
-  description:
-    "Этот курс по HTML предназначен для тех, кто хочет научиться создавать веб-страницы с нуля. Вы изучите структуру HTML-документа, основные теги, работу с текстом, изображениями, ссылками и таблицами. Курс отлично подойдёт для начинающих веб-разработчиков.",
-  badges: ["Программирование", "Начинающий", "Бесплатно"],
-  instructor: "Мурадов Азиз",
-  duration: "24 минут",
-  rating: 0,
-  reviews: 0,
-  lessons: [
-    {
-      title: "1. HTML - создание ссылок",
-      description:
-        "В этом уроке курса вы узнаете, как создавать ссылки на веб-страницах с помощью тега <a>. Мы разберём внутренние и внешние ссылки, атрибуты href, target, download, а также научимся делать ссылки на e-mail и якоря внутри страницы.",
-      duration: "10:29",
-    },
-    {
-      title: "2. HTML - Работа со списками",
-      description:
-        "В этом уроке подробно рассматривается работа со списками. Будет объяснено, как создавать упорядоченные, неупорядоченные и списки определений, а также как их стилизовать и использовать для структурирования контента.",
-      duration: "5:41",
-    },
-    {
-      title: "3. HTML - Работа с изображениями",
-      description:
-        "В этом уроке подробно рассматривается работа с изображениями. Будет объяснено, как вставлять изображения на веб-страницы, настраивать их размеры, альтернативный текст и другие атрибуты, а также использовать различные форматы изображений для оптимизации загрузки страниц.",
-      duration: "7:37",
-    },
-  ],
-};
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+import { Feather, Ionicons } from "@expo/vector-icons";
+import { useRoute, useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import type { RootStackParamList } from "../navigation/types";
+import { useCourses } from "../features/courses/service/useCourses";
 
 const CourseDetailScreen = () => {
-  const course = placeholderCourse;
+  const route = useRoute();
+  const { courseId } = route.params as { courseId: string };
+  const { getCourse } = useCourses();
+  const { data, isLoading, error } = getCourse(courseId);
+  const [enrolled, setEnrolled] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text style={{ fontSize: 25, fontWeight: 500 }}>Загрузка...</Text>
+      </View>
+    );
+  }
+  if (error || !data) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text style={{ fontSize: 25, fontWeight: 500 }}>
+          Ошибка загрузки курса
+        </Text>
+      </View>
+    );
+  }
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.badgesRow}>
-        {course.badges.map((badge, idx) => (
-          <View
-            key={badge}
-            style={[
-              styles.badge,
-              badge === "Бесплатно" && styles.badgeFree,
-              badge === "Начинающий" && styles.badgeLevel,
-              badge === "Программирование" && styles.badgeCategory,
-            ]}>
-            <Text
-              style={[
-                styles.badgeText,
-                badge === "Бесплатно" && styles.badgeTextFree,
-                badge === "Начинающий" && styles.badgeTextLevel,
-                badge === "Программирование" && styles.badgeTextCategory,
-              ]}>
-              {badge}
-            </Text>
-          </View>
-        ))}
+    <View style={{ flex: 1, backgroundColor: "#f5f5f5" }}>
+      <View style={styles.headerBar}>
+        <TouchableOpacity
+          style={styles.headerBackBtn}
+          onPress={() => navigation.goBack()}>
+          <Feather name="arrow-left" size={28} color="#111" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Назад</Text>
       </View>
-      <Text style={styles.title}>{course.title}</Text>
-      <Text style={styles.description}>{course.description}</Text>
-      <View style={styles.metaRow}>
-        <Ionicons name="person-outline" size={16} color="#666" />
-        <Text style={styles.metaText}>{course.instructor}</Text>
-        <Ionicons name="time-outline" size={16} color="#666" style={{ marginLeft: 8 }} />
-        <Text style={styles.metaText}>{course.duration}</Text>
-        <Ionicons name="star" size={16} color="#FFC107" style={{ marginLeft: 8 }} />
-        <Text style={styles.metaText}>{course.rating} (0 отзывов)</Text>
-      </View>
-      <TouchableOpacity style={styles.enrollButton}>
-        <Text style={styles.enrollButtonText}>Записаться на курс</Text>
-      </TouchableOpacity>
-      <View style={styles.sectionBox}>
-        <Text style={styles.sectionTitle}>Содержание курса</Text>
-        {course.lessons.map((lesson, idx) => (
-          <View key={lesson.title} style={styles.lessonCard}>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Ionicons name="videocam-outline" size={18} color="#007AFF" style={{ marginRight: 8 }} />
-              <Text style={styles.lessonTitle}>{lesson.title}</Text>
-              <Text style={styles.lessonDuration}>{lesson.duration}</Text>
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={{ paddingBottom: 32 }}>
+        <View style={styles.badgesRow}>
+          {data?.course?.category && (
+            <View style={[styles.badge, styles.badgeCategory]}>
+              <Text style={[styles.badgeText, styles.badgeTextCategory]}>
+                {data.course.category}
+              </Text>
             </View>
-            <Text style={styles.lessonDescription}>{lesson.description}</Text>
+          )}
+          {data?.course?.level && (
+            <View style={[styles.badge, styles.badgeLevel]}>
+              <Text style={[styles.badgeText, styles.badgeTextLevel]}>
+                {data.course.level}
+              </Text>
+            </View>
+          )}
+          {data?.course?.is_free && (
+            <View style={[styles.badge, styles.badgeFree]}>
+              <Text style={[styles.badgeText, styles.badgeTextFree]}>
+                Бесплатно
+              </Text>
+            </View>
+          )}
+        </View>
+        <Text style={styles.title}>{data?.course?.title}</Text>
+        <Text style={styles.description}>{data?.course?.description}</Text>
+        <View style={styles.metaRow}>
+          <Ionicons name="person-outline" size={16} color="#666" />
+          <Text style={styles.metaText}>{data?.course?.instructor}</Text>
+          <Ionicons
+            name="time-outline"
+            size={16}
+            color="#666"
+            style={{ marginLeft: 8 }}
+          />
+          <Text style={styles.metaText}>{data?.course?.duration}</Text>
+          <Ionicons
+            name="star"
+            size={16}
+            color="#FFC107"
+            style={{ marginLeft: 8 }}
+          />
+          <Text style={styles.metaText}>
+            {data?.course?.rating} (0 отзывов)
+          </Text>
+        </View>
+        <View>
+          {!enrolled ? (
+            <TouchableOpacity
+              style={styles.enrollButton}
+              onPress={() => setEnrolled(true)}>
+              <Text style={styles.enrollButtonText}>Записаться на курс</Text>
+            </TouchableOpacity>
+          ) : (
+            <>
+              <TouchableOpacity
+                style={[
+                  styles.enrollButton,
+                  { backgroundColor: "#000", marginBottom: 10 },
+                ]}
+                onPress={() => {
+                  if (data?.course?.lessons && data.course.lessons.length > 0) {
+                    const firstLesson = data.course.lessons[0];
+                    navigation.navigate("LessonDetail", {
+                      lessonId:
+                        firstLesson.id ||
+                        firstLesson.lessonId ||
+                        firstLesson._id,
+                      courseId: courseId,
+                    });
+                  }
+                }}>
+                <Text style={styles.enrollButtonText}>Начать обучение</Text>
+              </TouchableOpacity>
+              <View style={styles.progress}>
+                <Text style={styles.progressContainerText}>Прогресс курса</Text>
+                <Text style={styles.progressText}>{progress}%</Text>
+              </View>
+              <View style={styles.progressContainer}>
+                <View style={[styles.progressBar, { width: `${progress}%` }]} />
+              </View>
+            </>
+          )}
+        </View>
+        <View style={styles.sectionBox}>
+          <View style={styles.sectionBoxTitleandIcon}>
+            <Feather name="book" size={25} color="#000" />
+            <Text style={styles.sectionTitle}>Содержание курса</Text>
           </View>
-        ))}
-      </View>
-      <View style={styles.sectionBox}>
-        <Text style={styles.sectionTitle}>Информация о курсе</Text>
-        <Text style={styles.infoRow}><Text style={styles.infoLabel}>Уровень: </Text>Начинающий</Text>
-        <Text style={styles.infoRow}><Text style={styles.infoLabel}>Длительность: </Text>{course.duration}</Text>
-        <Text style={styles.infoRow}><Text style={styles.infoLabel}>Количество уроков: </Text>{course.lessons.length} уроков</Text>
-        <Text style={styles.infoRow}><Text style={styles.infoLabel}>Преподаватель: </Text>{course.instructor}</Text>
-      </View>
-    </ScrollView>
+          {Array.isArray(data?.course?.lessons) &&
+            data.course.lessons.length > 0 && (
+              <View
+                style={{
+                  marginBottom: 20,
+                  gap: 20,
+                }}>
+                {data.course.lessons.map((lesson: any, idx: number) => (
+                  <View key={lesson.id || idx} style={styles.lessonCard}>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        alignItems: "center",
+                        marginBottom: 4,
+                      }}>
+                      <Text style={styles.lessonTitle}>
+                        {idx + 1}. {lesson.title}
+                      </Text>
+                      <Ionicons
+                        name="videocam-outline"
+                        size={16}
+                        color="#3b82f6"
+                        style={{ marginLeft: 6, marginRight: 4 }}
+                      />
+                      <Text style={styles.lessonDuration}>
+                        {lesson.duration}
+                      </Text>
+                    </View>
+                    <Text style={styles.lessonDescription}>
+                      {lesson.description}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+            )}
+        </View>
+
+        <View style={styles.sectionBoxInfo}>
+          <Text style={styles.sectionBoxTitle}>Информация о курсе</Text>
+          <Text style={styles.infoRow}>
+            <Text style={styles.infoLabel}>Уровень: </Text>
+            {data?.course?.level}
+          </Text>
+          <Text style={styles.infoRow}>
+            <Text style={styles.infoLabel}>Длительность: </Text>
+            {data?.course?.duration}
+          </Text>
+          <Text style={styles.infoRow}>
+            <Text style={styles.infoLabel}>Количество уроков: </Text>{data?.course?.lessons?.length || 0} уроков
+          </Text>
+          <Text style={styles.infoRow}>
+            <Text style={styles.infoLabel}>Преподаватель: </Text>
+            {data?.course?.instructor}
+          </Text>
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -105,20 +208,20 @@ const styles = StyleSheet.create({
   },
   badgesRow: {
     flexDirection: "row",
-    marginBottom: 12,
+    marginBottom: 10,
     flexWrap: "wrap",
-    gap: 8,
+    gap: 5,
   },
   badge: {
-    borderRadius: 12,
-    paddingHorizontal: 10,
+    borderRadius: 20,
     paddingVertical: 4,
     marginRight: 8,
     marginBottom: 8,
     backgroundColor: "#f0f0f0",
+    padding: 10,
   },
   badgeFree: {
-    backgroundColor: "#28a745",
+    backgroundColor: "#22c55e",
   },
   badgeLevel: {
     backgroundColor: "#e0e7ff",
@@ -141,15 +244,16 @@ const styles = StyleSheet.create({
     color: "#007AFF",
   },
   title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#222",
+    fontSize: 30,
+    fontWeight: 700,
+    color: "#111827",
     marginBottom: 8,
   },
   description: {
-    fontSize: 16,
-    color: "#444",
+    fontSize: 18,
+    color: "#4b5563",
     marginBottom: 16,
+    fontWeight: 400,
   },
   metaRow: {
     flexDirection: "row",
@@ -178,24 +282,49 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderRadius: 12,
     padding: 16,
-    marginBottom: 18,
+    marginBottom: 20,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
     shadowRadius: 2,
     elevation: 1,
+    flexDirection: "column",
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#222",
+    fontSize: 24,
+    fontWeight: 600,
+    color: "#020817",
+  },
+  sectionBoxInfo: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    padding: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 2,
+    elevation: 1,
+    gap: 5,
+    marginBottom: 50,
+  },
+  sectionBoxTitle: {
+    fontSize: 24,
+    fontWeight: 600,
+    color: "#020817",
     marginBottom: 10,
+  },
+  sectionBoxTitleandIcon: {
+    flexDirection: "row",
+    marginBottom: 20,
+    alignItems: "center",
+    gap: 8,
   },
   lessonCard: {
     backgroundColor: "#f8fafc",
     borderRadius: 8,
     padding: 12,
-    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: "#e2e8f0",
   },
   lessonTitle: {
     fontSize: 15,
@@ -214,14 +343,78 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   infoRow: {
-    fontSize: 15,
-    color: "#333",
-    marginBottom: 4,
+    fontSize: 16,
+    color: "#4b5563",
+    lineHeight: 27,
   },
   infoLabel: {
+    fontSize: 16,
+    fontWeight: 500,
+    color: "#111827",
+  },
+  progress: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingBottom: 5,
+  },
+  progressContainer: {
+    height: 30,
+    backgroundColor: "#f1f5f9",
+    borderRadius: 20,
+    overflow: "hidden",
+    marginBottom: 18,
+    marginTop: 2,
+    flexDirection: "row",
+    alignItems: "center",
+    position: "relative",
+    borderWidth: 1,
+    borderColor: "#e2e8f0",
+  },
+  progressBar: {
+    height: 30,
+    backgroundColor: "#000",
+    borderRadius: 20,
+    position: "absolute",
+    left: 0,
+    top: 0,
+    bottom: 0,
+    zIndex: 1,
+  },
+  progressText: {
+    zIndex: 2,
+    color: "#111827",
     fontWeight: "bold",
-    color: "#222",
+    fontSize: 16,
+    marginLeft: "auto",
+    marginRight: 8,
+  },
+  progressContainerText: {
+    fontSize: 16,
+    fontWeight: 500,
+  },
+  headerBar: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingTop: 50,
+    paddingBottom: 12,
+    backgroundColor: "#fff",
+    paddingHorizontal: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f1f5f9",
+    elevation: 2,
+    zIndex: 10,
+  },
+  headerBackBtn: {
+    padding: 4,
+    marginRight: 8,
+  },
+  headerTitle: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#111",
+    flex: 1,
+    textAlign: "left",
   },
 });
 
-export default CourseDetailScreen; 
+export default CourseDetailScreen;

@@ -17,10 +17,10 @@ const ProfileScreen: React.FC = () => {
   const { user } = useSelector((state: RootState) => state.auth);
 
   const handleLogout = () => {
-    Alert.alert("Logout", "Are you sure you want to logout?", [
-      { text: "Cancel", style: "cancel" },
+    Alert.alert("Выход", "Вы уверены, что хотите выйти?", [
+      { text: "Отмена", style: "cancel" },
       {
-        text: "Logout",
+        text: "Выйти",
         style: "destructive",
         onPress: () => dispatch(logout()),
       },
@@ -30,43 +30,43 @@ const ProfileScreen: React.FC = () => {
   const profileOptions = [
     {
       id: "notifications",
-      title: "Notifications",
+      title: "Уведомления",
       icon: "notifications-outline",
       onPress: () =>
         Alert.alert(
-          "Coming Soon",
-          "Notification settings will be available soon"
+          "Скоро",
+          "Настройки уведомлений будут доступны скоро"
         ),
     },
     {
       id: "downloads",
-      title: "Downloads",
+      title: "Загрузки",
       icon: "download-outline",
       onPress: () =>
         Alert.alert(
-          "Coming Soon",
-          "Download management will be available soon"
+          "Скоро",
+          "Управление загрузками будет доступно скоро"
         ),
     },
     {
       id: "privacy",
-      title: "Privacy & Security",
+      title: "Конфиденциальность и безопасность",
       icon: "shield-outline",
       onPress: () =>
-        Alert.alert("Coming Soon", "Privacy settings will be available soon"),
+        Alert.alert("Скоро", "Настройки конфиденциальности будут доступны скоро"),
     },
     {
       id: "help",
-      title: "Help & Support",
+      title: "Помощь и поддержка",
       icon: "help-circle-outline",
       onPress: () =>
-        Alert.alert("Coming Soon", "Help center will be available soon"),
+        Alert.alert("Скоро", "Центр поддержки будет доступен скоро"),
     },
     {
       id: "about",
-      title: "About",
+      title: "О приложении",
       icon: "information-circle-outline",
-      onPress: () => Alert.alert("About", "Online School Mobile App v1.0.0"),
+      onPress: () => Alert.alert("О приложении", "Online School Mobile App v1.0.0"),
     },
   ];
 
@@ -90,17 +90,17 @@ const ProfileScreen: React.FC = () => {
       <View style={styles.statsContainer}>
         <View style={styles.statItem}>
           <Ionicons name="book" size={24} color="#007AFF" />
-          <Text style={styles.statLabel}>Courses</Text>
+          <Text style={styles.statLabel}>Курсы</Text>
           <Text style={styles.statValue}>0</Text>
         </View>
         <View style={styles.statItem}>
           <Ionicons name="time" size={24} color="#28a745" />
-          <Text style={styles.statLabel}>Hours</Text>
+          <Text style={styles.statLabel}>Часы</Text>
           <Text style={styles.statValue}>0</Text>
         </View>
         <View style={styles.statItem}>
           <Ionicons name="trophy" size={24} color="#ffc107" />
-          <Text style={styles.statLabel}>Certificates</Text>
+          <Text style={styles.statLabel}>Сертификаты</Text>
           <Text style={styles.statValue}>0</Text>
         </View>
       </View>
@@ -123,7 +123,7 @@ const ProfileScreen: React.FC = () => {
       <View style={styles.logoutContainer}>
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
           <Ionicons name="log-out-outline" size={24} color="#dc3545" />
-          <Text style={styles.logoutText}>Logout</Text>
+          <Text style={styles.logoutText}>Выход из системы</Text>
         </TouchableOpacity>
       </View>
 

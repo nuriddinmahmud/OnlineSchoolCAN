@@ -64,10 +64,20 @@ const HomeScreen: React.FC = () => {
 
   const renderCourse = ({ item }: { item: any }) => (
     <View
-      style={{ padding: 10, alignItems: "center", backgroundColor: "#f9fafb" }}>
+      style={{
+        padding: 10,
+        alignItems: "center",
+      }}>
       <View style={styles.card}>
         <View style={styles.imageContainer}>
-          <Image source={{ uri: item?.image_url }} style={styles.image} />
+          <Image
+            source={{
+              uri: item?.image_url
+                ? item.image_url
+                : "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=400",
+            }}
+            style={styles.image}
+          />
           {item?.is_free && (
             <View style={styles.freeBadge}>
               <Text style={styles.freeBadgeText}>Бесплатно</Text>
@@ -96,13 +106,25 @@ const HomeScreen: React.FC = () => {
             <Text style={styles.metaText}>{item.duration}</Text>
           </View>
           <View style={styles.metaRow}>
-            <Ionicons name="star" size={16} color="#ffc107" />
-            <Text style={styles.metaText}>0 (0 студентов)</Text>
-            <View style={styles.categoryBadge}>
-              <Text style={styles.categoryBadgeText}>{item.category}</Text>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+              }}>
+              <View style={{ flexDirection: "row" }}>
+                <Ionicons name="star" size={16} color="#ffc107" />
+                <Text style={styles.metaText}>0 (0 студентов)</Text>
+              </View>
+              <View style={styles.categoryBadge}>
+                <Text style={styles.categoryBadgeText}>{item.category}</Text>
+              </View>
             </View>
           </View>
-          <TouchableOpacity style={styles.detailsButton}>
+          <TouchableOpacity
+            style={styles.detailsButton}
+            onPress={() =>
+              navigation.navigate("CourseDetail", { courseId: item.id })
+            }>
             <Text style={styles.detailsButtonText}>Подробнее</Text>
           </TouchableOpacity>
         </View>
@@ -123,10 +145,9 @@ const HomeScreen: React.FC = () => {
           resizeMode="contain"
         />
         <Text style={styles.logoText}>
-          <Text style={styles.logoEdu}> Education</Text>
+          <Text style={styles.logoEdu}> Can Education</Text>
         </Text>
       </View>
-
       <View style={styles.badge}>
         <Ionicons
           name="book-outline"
@@ -189,10 +210,24 @@ const HomeScreen: React.FC = () => {
           data={data?.courses}
           renderItem={renderCourse}
           keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
           scrollEnabled={false}
         />
+      </View>
+      {/* Stats Section (after courses) */}
+      <View style={styles.statsBlock}>
+        <View style={styles.statItemBlock}>
+          <Text style={[styles.statNumber, { color: "#2563eb" }]}>50+</Text>
+          <Text style={styles.statText}>Курсов</Text>
+        </View>
+        <View style={styles.statItemBlock}>
+          <Text style={[styles.statNumber, { color: "#22c55e" }]}>1000+</Text>
+          <Text style={styles.statText}>Студентов</Text>
+        </View>
+        <View style={styles.statItemBlock}>
+          <Text style={[styles.statNumber, { color: "#9333ea" }]}>95%</Text>
+          <Text style={styles.statText}>Завершили курсы</Text>
+        </View>
       </View>
     </ScrollView>
   );
@@ -214,7 +249,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
     paddingTop: 25,
     paddingLeft: 25,
-    marginBottom: 30,
     borderBottomWidth: 1,
     borderBottomColor: "#e0e0e0",
   },
@@ -347,41 +381,34 @@ const styles = StyleSheet.create({
   },
   coursesContainer: {
     width: "100%",
+    backgroundColor: "#f9fafb",
   },
   sectionTitle: {
     fontSize: 22,
     fontWeight: "bold",
     color: "#222",
-    marginBottom: 20,
-    marginLeft: 20,
-  },
-  listContent: {
-    paddingBottom: 24,
-    alignItems: "center",
+    marginBottom: 10,
+    marginLeft: 10,
+    marginTop: 20,
   },
   card: {
     backgroundColor: "#fff",
-    borderRadius: 10,
-    marginBottom: 22,
-    width: "98%",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.07,
-    shadowRadius: 12,
-    elevation: 3,
+    borderRadius: 15,
+    width: "100%",
     overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "#e2e8f0",
   },
   imageContainer: {
     position: "relative",
     width: "100%",
     height: 140,
     backgroundColor: "#eee",
+    overflow: "hidden",
   },
   image: {
     width: "100%",
     height: "100%",
-    borderTopLeftRadius: 18,
-    borderTopRightRadius: 18,
   },
   freeBadge: {
     position: "absolute",
@@ -413,11 +440,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   levelBadge: {
-    backgroundColor: "#f3f4f6",
-    borderRadius: 8,
+    backgroundColor: "#fff",
+    borderRadius: 10,
     paddingHorizontal: 8,
     paddingVertical: 2,
     marginLeft: 8,
+    borderWidth: 1,
+    borderColor: "#e2e8f0",
   },
   levelBadgeText: {
     color: "#222",
@@ -442,10 +471,9 @@ const styles = StyleSheet.create({
   },
   categoryBadge: {
     backgroundColor: "#f3f4f6",
-    borderRadius: 8,
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    marginLeft: 8,
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 3,
   },
   categoryBadgeText: {
     color: "#222",
@@ -463,6 +491,35 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  statsBlock: {
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    marginTop: 30,
+    marginBottom: 30,
+    alignItems: "center",
+    paddingVertical: 30,
+    width: "90%",
+    alignSelf: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 2,
+    elevation: 2,
+  },
+  statItemBlock: {
+    alignItems: "center",
+    marginBottom: 28,
+  },
+  statNumber: {
+    fontSize: 38,
+    fontWeight: "bold",
+    marginBottom: 2,
+  },
+  statText: {
+    fontSize: 18,
+    color: "#444",
+    marginBottom: 2,
   },
 });
 

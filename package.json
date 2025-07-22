@@ -4,8 +4,8 @@
   "main": "index.ts",
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web"
   },
   "dependencies": {
@@ -17,19 +17,20 @@
     "@reduxjs/toolkit": "^2.8.2",
     "@tanstack/react-query": "^5.83.0",
     "@types/react-native": "^0.73.0",
-    "antd-mobile": "^5.39.0",
     "axios": "^1.10.0",
     "expo": "^53.0.19",
     "expo-av": "^15.1.7",
     "expo-linear-gradient": "~14.1.5",
     "expo-status-bar": "~2.2.3",
+    "expo-video": "^2.2.2",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "react-icons": "^5.5.0",
     "react-native": "0.79.5",
     "react-native-safe-area-context": "^5.5.2",
     "react-native-screens": "^4.11.1",
-    "react-native-toast-message": "^2.3.3",
+    "react-native-video": "^6.0.0",
+    "react-native-video-player": "^0.16.3",
     "react-native-web": "^0.20.0",
     "react-redux": "^9.2.0"
   },
@@ -38,5 +39,18 @@
     "@types/react": "~19.0.10",
     "typescript": "~5.8.3"
   },
-  "private": true
+  "private": true,
+  "description": "A cross-platform mobile application for online learning built with React Native and Expo.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nuriddinmahmud/OnlineSchoolCAN.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/nuriddinmahmud/OnlineSchoolCAN/issues"
+  },
+  "homepage": "https://github.com/nuriddinmahmud/OnlineSchoolCAN#readme"
 }

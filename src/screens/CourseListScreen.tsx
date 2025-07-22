@@ -33,7 +33,7 @@ const CourseListScreen: React.FC<CourseListScreenProps> = ({ navigation }) => {
           />
           <TextInput
             style={styles.searchInput}
-            placeholder="Search courses..."
+            placeholder="Поиск курсов..."
           />
         </View>
         <TouchableOpacity
@@ -46,7 +46,7 @@ const CourseListScreen: React.FC<CourseListScreenProps> = ({ navigation }) => {
       {showCategoryFilter && (
         <View style={styles.categoryFilter}>
           <TouchableOpacity style={[styles.categoryItem]}>
-            <Text style={[styles.categoryText]}>All</Text>
+            <Text style={[styles.categoryText]}>Все</Text>
           </TouchableOpacity>
         </View>
       )}
@@ -56,17 +56,23 @@ const CourseListScreen: React.FC<CourseListScreenProps> = ({ navigation }) => {
         keyExtractor={(item, idx) => item.title + idx}
         renderItem={({ item }) => (
           <CourseCard
-            imageUrl={item?.image_url}
-            isFree={item.isFree}
+            imageUrl={
+              item?.image_url
+                ? item?.image_url
+                : "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=400"
+            }
+            isFree={item.is_free}
             title={item.title}
             level={item.level}
             description={item.description}
             instructor={item.instructor}
             duration={item.duration}
             rating={item.rating}
-            studentsCount={item.studentsCount}
+            studentsCount={item.students_count}
             category={item.category}
-            onPress={() => navigation.navigate("CourseDetail")}
+            onPress={() =>
+              navigation.navigate("CourseDetail", { courseId: item.id })
+            }
           />
         )}
         contentContainerStyle={{ padding: 16 }}
@@ -92,7 +98,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "#f0f0f0",
-    borderRadius: 8,
+    borderRadius: 20,
     paddingHorizontal: 12,
   },
   searchIcon: {

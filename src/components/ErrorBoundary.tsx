@@ -34,9 +34,9 @@ class ErrorBoundary extends Component<Props, State> {
       return (
         <View style={styles.container}>
           <Ionicons name="warning-outline" size={64} color="#ff6b35" />
-          <Text style={styles.title}>Something went wrong</Text>
+          <Text style={styles.title}>Произошла ошибка</Text>
           <Text style={styles.message}>
-            An unexpected error occurred. Please try again.
+            Возникла непредвиденная ошибка. Пожалуйста, попробуйте еще раз.
           </Text>
           {__DEV__ && this.state.error && (
             <Text style={styles.errorDetails}>
@@ -46,7 +46,7 @@ class ErrorBoundary extends Component<Props, State> {
           <TouchableOpacity
             style={styles.retryButton}
             onPress={this.handleRetry}>
-            <Text style={styles.retryButtonText}>Try Again</Text>
+            <Text style={styles.retryButtonText}>Попробовать снова</Text>
           </TouchableOpacity>
         </View>
       );
