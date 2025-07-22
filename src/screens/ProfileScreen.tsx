@@ -6,15 +6,18 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
+  Linking,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import { AppDispatch, RootState } from "../app/store";
 import { logout } from "../features/auth/store/auth.slice";
+import { useNavigation } from "@react-navigation/native";
 
 const ProfileScreen: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth);
+  const navigation = useNavigation();
 
   const handleLogout = () => {
     Alert.alert("Выход", "Вы уверены, что хотите выйти?", [
@@ -50,23 +53,24 @@ const ProfileScreen: React.FC = () => {
     },
     {
       id: "privacy",
-      title: "Конфиденциальность и безопасность",
+      title: "Конфиденциальность",
       icon: "shield-outline",
       onPress: () =>
-        Alert.alert("Скоро", "Настройки конфиденциальности будут доступны скоро"),
+        Linking.openURL("https://preview--can-online-school-hub.lovable.app/"),
     },
     {
       id: "help",
       title: "Помощь и поддержка",
       icon: "help-circle-outline",
       onPress: () =>
-        Alert.alert("Скоро", "Центр поддержки будет доступен скоро"),
+        Linking.openURL("https://preview--can-online-school-hub.lovable.app/"),
     },
     {
       id: "about",
       title: "О приложении",
       icon: "information-circle-outline",
-      onPress: () => Alert.alert("О приложении", "Online School Mobile App v1.0.0"),
+      onPress: () =>
+         Linking.openURL("https://preview--can-online-school-hub.lovable.app/"),
     },
   ];
 
