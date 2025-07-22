@@ -7,6 +7,7 @@ import CourseListScreen from "../screens/CourseListScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import HomeScreen from "../screens/HomeScreen";
 import CourseDetailScreen from "../screens/CourseDetailScreen";
+import LoginScreen from "../screens/LoginScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -28,38 +29,43 @@ const CoursesStack = () => {
   );
 };
 
-const MainNavigator = () => {
-  return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName: keyof typeof Ionicons.glyphMap;
+const MainTabs = () => (
+  <Tab.Navigator
+    screenOptions={({ route }) => ({
+      tabBarIcon: ({ focused, color, size }) => {
+        let iconName: keyof typeof Ionicons.glyphMap;
 
-          if (route.name === "Courses") {
-            iconName = focused ? "book" : "book-outline";
-          } else if (route.name === "Progress") {
-            iconName = focused ? "stats-chart" : "stats-chart-outline";
-          } else if (route.name === "Bookmarks") {
-            iconName = focused ? "bookmark" : "bookmark-outline";
-          } else if (route.name === "Profile") {
-            iconName = focused ? "person" : "person-outline";
-          } else if (route.name === "Home") {
-            iconName = focused ? "home" : "home-outline";
-          } else {
-            iconName = "book-outline";
-          }
+        if (route.name === "Courses") {
+          iconName = focused ? "book" : "book-outline";
+        } else if (route.name === "Progress") {
+          iconName = focused ? "stats-chart" : "stats-chart-outline";
+        } else if (route.name === "Bookmarks") {
+          iconName = focused ? "bookmark" : "bookmark-outline";
+        } else if (route.name === "Profile") {
+          iconName = focused ? "person" : "person-outline";
+        } else if (route.name === "Home") {
+          iconName = focused ? "home" : "home-outline";
+        } else {
+          iconName = "book-outline";
+        }
 
-          return <Ionicons name={iconName} size={size} color={color} />;
-        },
-        tabBarActiveTintColor: "#007AFF",
-        tabBarInactiveTintColor: "gray",
-        headerShown: false,
-      })}>
-      <Tab.Screen name="Home" component={HomeScreen} />
-      <Tab.Screen name="Courses" component={CoursesStack} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
-    </Tab.Navigator>
-  );
-};
+        return <Ionicons name={iconName} size={size} color={color} />;
+      },
+      tabBarActiveTintColor: "#007AFF",
+      tabBarInactiveTintColor: "gray",
+      headerShown: false,
+    })}>
+    <Tab.Screen name="Home" component={HomeScreen} />
+    <Tab.Screen name="Courses" component={CoursesStack} />
+    <Tab.Screen name="Profile" component={ProfileScreen} />
+  </Tab.Navigator>
+);
+
+const MainNavigator = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="MainTabs" component={MainTabs} />
+    <Stack.Screen name="Login" component={LoginScreen} />   
+  </Stack.Navigator>
+);
 
 export default MainNavigator;

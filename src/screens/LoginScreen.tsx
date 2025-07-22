@@ -33,7 +33,7 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
         {
           onSuccess: () => {
             Alert.alert("Вход успешен", "Вы можете продолжить обучение");
-            navigation.navigate("HomeScreen");
+            navigation.navigate("MainTabs");
           },
           onError: () => {
             Alert.alert("Ошибка входа", "Неверные учетные данные для входа");
@@ -101,7 +101,12 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
       </View>
       <View style={styles.mainTitleContainer}>
         <Text style={styles.mainTitle}>
-          <Feather name="book" size={30} color="#2563eb" />
+          <Feather
+            onPress={() => navigation.navigate("MainTabs")}
+            name="book"
+            size={30}
+            color="#2563eb"
+          />
           Can Education
         </Text>
       </View>

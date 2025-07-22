@@ -16,7 +16,7 @@ const AppNavigator = () => {
 
   return (
     <NavigationContainer>
-      <MainNavigator/>
+      {token ? <MainNavigator /> : <AuthNavigator />}
     </NavigationContainer>
   );
 };
