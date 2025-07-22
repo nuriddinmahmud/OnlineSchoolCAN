@@ -6,7 +6,8 @@ export const handleApiError = (error: any) => {
   if (error.response) {
     switch (error.response.status) {
       case 400:
-        message = "Некорректный запрос. Пожалуйста, проверьте введённые данные.";
+        message =
+          "Некорректный запрос. Пожалуйста, проверьте введённые данные.";
         break;
       case 401:
         message = "Ошибка аутентификации. Пожалуйста, войдите снова.";
