@@ -145,7 +145,7 @@ const HomeScreen: React.FC = () => {
           resizeMode="contain"
         />
         <Text style={styles.logoText}>
-          <Text style={styles.logoEdu}> Education</Text>
+          <Text style={styles.logoEdu}> Can Education</Text>
         </Text>
       </View>
       <View style={styles.badge}>

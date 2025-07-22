@@ -188,7 +188,7 @@ const CourseDetailScreen = () => {
             {data?.course?.duration}
           </Text>
           <Text style={styles.infoRow}>
-            <Text style={styles.infoLabel}>Количество уроков: </Text>3 уроков
+            <Text style={styles.infoLabel}>Количество уроков: </Text>{data?.course?.lessons?.length || 0} уроков
           </Text>
           <Text style={styles.infoRow}>
             <Text style={styles.infoLabel}>Преподаватель: </Text>

@@ -21,11 +21,11 @@ const CoursesStack = () => {
         component={CourseListScreen}
         options={{ title: "Курсы" }}
       />
-      {/* <Stack.Screen
+      <Stack.Screen
         name="LessonDetail"
         component={LessonDetailScreen}
         options={{ headerShown: true, title: "Назад к курсу" }}
-      /> */}
+      />
     </Stack.Navigator>
   );
 };
@@ -56,9 +56,9 @@ const MainTabs = () => (
       tabBarInactiveTintColor: "gray",
       headerShown: false,
     })}>
-    <Tab.Screen name="Home" component={HomeScreen} />
-    <Tab.Screen name="Courses" component={CoursesStack} />
-    <Tab.Screen name="Profile" component={ProfileScreen} />
+    <Tab.Screen name="Home" component={HomeScreen} options={{ tabBarLabel: 'Главная' }} />
+    <Tab.Screen name="Courses" component={CoursesStack} options={{ tabBarLabel: 'Курсы' }} />
+    <Tab.Screen name="Profile" component={ProfileScreen} options={{ tabBarLabel: 'Профиль' }} />
   </Tab.Navigator>
 );
 

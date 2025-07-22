@@ -33,7 +33,7 @@ const CourseListScreen: React.FC<CourseListScreenProps> = ({ navigation }) => {
           />
           <TextInput
             style={styles.searchInput}
-            placeholder="Search courses..."
+            placeholder="Поиск курсов..."
           />
         </View>
         <TouchableOpacity
@@ -46,7 +46,7 @@ const CourseListScreen: React.FC<CourseListScreenProps> = ({ navigation }) => {
       {showCategoryFilter && (
         <View style={styles.categoryFilter}>
           <TouchableOpacity style={[styles.categoryItem]}>
-            <Text style={[styles.categoryText]}>All</Text>
+            <Text style={[styles.categoryText]}>Все</Text>
           </TouchableOpacity>
         </View>
       )}

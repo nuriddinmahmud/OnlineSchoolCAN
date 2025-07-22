@@ -37,5 +37,18 @@
     "@types/react": "~19.0.10",
     "typescript": "~5.8.3"
   },
-  "private": true
+  "private": true,
+  "description": "A cross-platform mobile application for online learning built with React Native and Expo.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nuriddinmahmud/OnlineSchoolCAN.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/nuriddinmahmud/OnlineSchoolCAN/issues"
+  },
+  "homepage": "https://github.com/nuriddinmahmud/OnlineSchoolCAN#readme"
 }
